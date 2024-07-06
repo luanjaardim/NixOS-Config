@@ -2,8 +2,8 @@
 {
 
   home.file = {
-    "./config/sxhkd/sxhkdrc".source = ./sxhkdrc;
-    "./config/sxhkd/scripts" = {
+    "./.config/sxhkd/sxhkdrc".source = ./sxhkdrc;
+    "./.config/sxhkd/scripts" = {
       source = ./scripts;
       recursive = true;
       executable = true;

@@ -1,5 +1,4 @@
-#!/usr/bin/env nix-shell
-#! nix-shell -i bash
+#!/usr/bin/env bash
 
 bar_state="$(dirname $0)/.bar_tog_tmp"
 

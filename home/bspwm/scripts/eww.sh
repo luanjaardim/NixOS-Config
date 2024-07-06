@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 pgrep -x eww > /dev/null || eww daemon &
 
 # open windows from eww

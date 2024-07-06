@@ -25,6 +25,9 @@ in
   imports = [
     ./eww
     ./rofi
+    ./sxhkd
+    ./bspwm
+    ./dunst
   ];
 
   # set cursor size and dpi for 4k monitor
@@ -49,6 +52,8 @@ in
     fd # Find files with fd
     eza # A modern replacement for ‘ls’
     fzf # A command-line fuzzy finder
+    brightnessctl # brightness controller
+    playerctl # music player
 
     # networking tools
     mtr # A network diagnostic tool
@@ -91,14 +96,16 @@ in
 
     # Other programs
     eww
+    rofi
+    dunst
   ];
 
   programs = {
     # basic configuration of git
     git = {
       enable = true;
-      userName = "Luan Jardim";
-      userEmail = "luanjaardim@gmail.com";
+      userName = "luanjaardim";
+      userEmail = "luang.ajardim@gmail.com";
     };
     # starship - an customizable prompt for any shell
     starship = {

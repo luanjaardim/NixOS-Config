@@ -2,9 +2,9 @@
 {
 
   home.file = {
-    "./config/eww/eww.yuck".source = ./eww.yuck;
-    "./config/eww/eww.scss".source = ./eww.scss;
-    "./config/eww/scripts" = {
+    "./.config/eww/eww.yuck".source = ./eww.yuck;
+    "./.config/eww/eww.scss".source = ./eww.scss;
+    "./.config/eww/scripts" = {
       source = ./scripts;
 
       # import every script in the folder
@@ -12,19 +12,19 @@
       # make them executable
       executable = true;
     };
-    "./config/eww/scss" = {
+    "./.config/eww/scss" = {
       source = ./scss;
       recursive = true;
     };
-    "./config/eww/src" = {
+    "./.config/eww/src" = {
        source = ./src;
        recursive = true;
     };
-    "./config/eww/bar" = {
+    "./.config/eww/bar" = {
        source = ./bar;
        recursive = true;
     };
-    "./config/eww/panel" = {
+    "./.config/eww/panel" = {
        source = ./panel;
        recursive = true;
     };

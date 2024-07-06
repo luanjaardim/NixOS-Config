@@ -1,11 +1,9 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Starting some programs before bspwm
 pgrep -x sxhkd > /dev/null || sxhkd & # start sxhkd if not already running
 . $HOME/.config/bspwm/scripts/eww.sh  # start eww
 ~/.fehbg &                            # set wallpaper
-xsetroot -cursor_name left_ptr &      # set cursor
-picom --animations -b &               # start picom (ftlabs fork)
 
 bspc monitor -d 1 2 3 4 5
 
