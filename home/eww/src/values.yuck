@@ -1,0 +1,51 @@
+(defpoll network_icon :interval "10s"
+  "./scripts/wifi.sh icon")
+(defpoll network_class :interval "10s"
+  "./scripts/wifi.sh class")
+(defpoll network_name :interval "10s"
+  "./scripts/wifi.sh name")
+
+(defpoll music_info :interval "5s"
+  "./scripts/player.sh info")
+(defpoll music_cur_time :interval "5s"
+  "./scripts/player.sh pos")
+(defpoll music_length :interval "5s"
+  "./scripts/player.sh len")
+(defpoll music_paused :interval "5s"
+  "./scripts/player.sh status")
+
+(defpoll time_hour :interval "5m"
+       "date +\"%I\"")
+(defpoll time_year :interval "12h"
+       "date +\"%y\"")
+(defpoll time_min :interval "5s"
+       "date +\"%M\"")
+(defpoll time_mer :interval "1h" ; PM or AM
+        "date +\"%p\"")
+(defpoll time_day :interval "30m"
+       "date +\"%d\"")
+(defpoll time_month :interval "48h"
+      "date +\%m")
+(defpoll time_day_name :interval "30m"
+       "date +\"%A\"")
+(defpoll time_month_name :interval "48h"
+      "date +\%B")
+
+(defpoll volume :interval "1s"
+  "amixer get Master | grep -oP '\\d+%' | head -n1 | tr -d '%'")
+(defvar set_volume_cmd "amixer -D pulse sset Master {}%")
+
+(defpoll microphone :interval "5s"
+  "amixer get Capture | grep -oP '\\d+%' | head -n1 | tr -d '%'")
+(defvar set_microphone_cmd "amixer -D pulse sset Capture {}%")
+
+(defpoll battery :interval "10s"
+  "./scripts/batt.sh") ;; calls a script that returns the battery percentage, and notifies battery status with dunst
+
+(defpoll brightness :interval "1s"
+  "brightnessctl g")
+(defvar set_brightness_cmd "brightnessctl set {}%")
+
+;; use this to get the brightness percentage
+(defpoll brightness_max :interval "100h"
+  "brightnessctl m")

@@ -1,0 +1,5 @@
+(include "./src/values.yuck") ; Load variables values, used in the bar and in the panel
+(include "src/widgets.yuck")  ; Load widgets, used in the panel and in the bar
+(include "./bar/eww.yuck")    ; Load bar
+(include "./panel/eww.yuck")  ; Load panel
+

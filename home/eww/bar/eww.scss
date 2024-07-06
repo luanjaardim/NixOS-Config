@@ -1,0 +1,150 @@
+/** tooltip!! **/
+tooltip.background {
+    background-color: #0f0f17;
+    border-radius: 10px;
+    color: #bfc9db;
+}
+
+tooltip label {
+    margin: 6px;
+}
+
+//Global Styles
+.bar {
+  background-color: $black;
+  border-radius: 15px;
+  border: 0.5px solid $grey;
+  color: #b0b4bc;
+  padding: 5px;
+}
+
+// Styles on classes (see eww.yuck for more information)
+
+.sidestuff slider {
+  all: unset;
+  color: #ffd5cd;
+}
+
+.sep {
+  color: $blue-desaturated;
+  padding: 0 5px;
+}
+
+scale trough {
+  all: unset;
+  background-color: $bg2;
+  border-radius: 5px;
+  min-height: 10px;
+  min-width: 80px;
+  margin: 0 .8rem 0 0;
+}
+
+.metric trough highlight {
+  background-color: $wyellow;
+  border-radius: 5px;
+}
+
+.base_icon {
+  background-color: $bg;
+  &:hover { background-color: $bg-alt; }
+  &:active { background-color: $bg2; }
+  padding: 0px 17px 0px 10px;
+  border-radius: 7px;
+  border-bottom: solid 1px;
+}
+
+.network {
+  @extend .base_icon;
+  &.disconnected { color: $red; border-bottom-color: $red; }
+  &.connected { color: $fg; border-bottom-color: $fg; }
+}
+
+.volume_label {
+  @extend .base_icon;
+  font-size: 18px;
+  color: $wblue;
+  padding: 0px 0px 0px 10px ;
+}
+
+.brightness_label {
+  @extend .base_icon;
+  font-size: 18px;
+  color: $wred;
+  padding: 0px 0px 0px 4px;
+}
+
+.battery_label {
+  font-size: 18px;
+  color: $wgreen;
+}
+
+.ram_label {
+  font-size: 18px;
+  color: $wyellow;
+}
+
+.circle_control_container {
+  padding: 0px 10px 0px 0px;
+}
+
+.circle_control {
+  background-color: $bg2;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.inner_circle_control {
+  font-size: 9px;
+  margin: 0px 3px 0px 0px;
+}
+
+.battery_control {
+  @extend .circle_control;
+  color: $wgreen;
+}
+
+.ram_control {
+  @extend .circle_control;
+  color: $wyellow;
+}
+
+.time {
+  padding: 0px 10px 0px 10px;
+  font-size: 17px;
+  color: $white;
+}
+
+.cal {
+  background-color: $bg;
+}
+
+.workspaces button:hover {
+  color: $yellow;
+}
+
+.workspaces {
+  font-family: "JetBrains Mono";
+  font-size: 17px;
+  padding-top: 2px;
+
+  button {
+    margin: 0px 3px;
+  }
+  .occupied {
+    color: $white-alt;
+  }
+
+  .focused {
+    color: $white;
+  }
+
+  .urgent {
+    color: #D35000;
+  }
+
+  .empty {
+    color: $grey;
+//  font-family: "Font Awesome 5 Free Regular"
+  }
+
+}

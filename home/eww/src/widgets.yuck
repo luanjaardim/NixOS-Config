@@ -1,0 +1,285 @@
+;
+; PANEL WIDGETS
+;
+
+(defwidget main []
+  (box :class "bg" :orientation "h" :space-evenly "false"))
+
+(defwidget profile []
+  (box :orientation "v" :spacing 20 :space-evenly "false" :vexpand "false" :hexpand "false" 
+    (box :halign "center" :class "sub_bg"
+        (image :path "./panel/images/arch.png"
+               :image-width 190
+               :image-height 190
+))))
+
+; TODO: refactor this
+(defwidget time [] 
+		(box
+             :class "sub_bg"
+             :orientation "v" 
+             :space-evenly "false" 
+             :vexpand "false" 
+             :hexpand "false" 
+             :spacing 0
+		(box  
+             :orientation "h" 
+             :space-evenly "false" 
+             :vexpand "false" 
+             :halign "start"
+             :hexpand "false" 
+             :spacing 0
+			 (label :class "hour_class" 
+                    :valign "start" 
+                    :halign "start"
+                    :wrap "true" 
+                    :limit-width 25 
+                    :text time_hour)
+			 (label :class "minute_class" 
+                    :valign "start" 
+                    :halign "start" 
+                    :wrap "true" 
+                    :limit-width 25 
+                    :text time_min)
+			 (label :class "mer_class" 
+                    :valign "start" 
+                    :halign "start" 
+                    :wrap "true" 
+                    :text time_mer))
+            (box :orientation "h" 
+              :spacing 0 
+              :space-evenly "false" 
+              :halign "start"
+              :vexpand "false" :hexpand "false" 
+			  (label :class "day_class" 
+                     :valign "start" 
+                     :text time_day)
+			  (label :class "time_sep"
+                     :valign "start" 
+                     :text " ")
+			  (label :class "month_class" 
+                     :valign "start" 
+                     :text time_month)
+			  (label :class "year_class" 
+                     :valign "start" 
+                     :text time_year))
+            (box :orientation "h" 
+              :spacing 0 
+              :space-evenly "false" 
+              :halign "start"
+              :vexpand "false" :hexpand "false" 
+			  (label :class "day_class_n" 
+                     :valign "start" 
+                     :text time_day_name)
+			  (label :class "time_sep_class"
+                     :valign "start" 
+                     :text ", ")
+			  (label :class "month_class_n" 
+                     :valign "start" 
+                     :text time_month_name))))
+
+;;music player
+(defvar pctl "playerctl --player=spotify,%any")
+(defwidget player []
+  (box :orientation "v" :spacing 7 :class "sub_bg"
+    (label :class "music_info" :text {music_info} :limit-width 400)
+    (box :class "vol_bar"
+      (scale
+        :min 0
+        :max {music_length/1000000}
+        :value {music_cur_time/1000000}
+        :onchange "${pctl} position {}"
+        :width 400))
+    (box :orientation "h" :spacing 3
+      (button :class "music_info" :onclick "${pctl} previous" "")
+      (button :class "music_info" 
+        :onclick "${pctl} play-pause; eww update music_paused=${!music_paused}"
+        {music_paused ? "" : ""})
+      (button :class "music_info" :onclick "${pctl} next" "")
+)))
+
+(defwidget but [ icon but-class command ]
+  (box :vexpand "false" :hexpand "false"
+    (button :class but-class :onclick command icon)))
+
+;; power buttons
+(defwidget buttons []
+  (box :class "btn_container"
+    :orientation "h" :space-evenly "true" 
+    (but :icon " 󰗽 " :but-class "btn_logout" :command "bspc quit")
+    (but :icon " 󰤄 " :but-class "btn_sleep" :command "systemctl suspend")
+    (but :icon "  " :but-class "btn_reboot" :command "systemctl reboot")
+    (but :icon " " :but-class "btn_poweroff":command "shutdown now")))
+
+(defwidget pizza [ text inner-text value custom-text custom-circ ]
+  (box :orientation "v"
+    :hexpand true
+    :space-evenly false
+      (circular-progress :value value
+        :class custom-circ
+        :height 100
+        :width 100
+        :thickness 20
+      (label :class custom-text :text inner-text))
+      (label :text text
+        :class custom-text
+)))
+
+(defwidget system []
+  (box :spacing 13 :orientation "h" :class "sys_container"
+    (pizza :text "CPU" :inner-text ""
+      :value {EWW_CPU.avg} :custom-text "t_cpu" :custom-circ "p_cpu")
+    (pizza :text "RAM" :inner-text ""
+      :value {EWW_RAM.used_mem_perc} :custom-text "t_ram" :custom-circ "p_ram")
+    (pizza :text "BAT" :inner-text ""
+      :value battery :custom-text "t_bat" :custom-circ "p_bat")))
+
+(defwidget control [ icon value text-class scale-class onchange ]
+  (box :class "sub_bg" :orientation "h" :space-evenly false
+    ; text with the same length, so the bar doesn't move
+    (label :text {
+      value >= 10 ? "${icon}   ${value}%" : "${icon}   ${value}%  "
+    } :class text-class)
+    (box :class scale-class
+      (scale
+      :min 0
+      :max 100
+      :width 280
+      :value value
+      :onchange onchange
+))))
+
+(defwidget controls []
+  (box :orientation "v" :spacing 10
+    (control :icon "" :value volume :text-class "vol_control_label" :scale-class "vol_bar"
+      :onchange set_volume_cmd)
+    (control :icon "" :value microphone :text-class "mic_control_label" :scale-class "mic_bar"
+      :onchange set_microphone_cmd)
+    (control :icon "󰃠" :value {brightness * 100/ brightness_max} :text-class "bri_control_label" :scale-class "bri_bar"
+      :onchange set_brightness_cmd
+)))
+
+;
+; BAR WIDGETS
+;
+
+(defvar bar_visible true) ; used on sxhkd/scripts to toggle bar visibility
+
+(defwidget bar []
+  (eventbox
+    :onhoverlost "eww update vol_show=false; eww update bri_show=false;" ;; hide volume and brightness controls when mouse leaves bar
+    (centerbox
+        :class "bar"
+        :orientation "h"
+      (workspaces)
+      (button
+        :class "time"
+        :onclick "eww ${cal_open ? "close" : "open" } cal; eww update cal_open=${!cal_open}"
+        "   ${time_hour}:${time_min} ${time_mer}, ${time_day_name} ${time_day}")
+      (sidestuff))))
+
+(defvar vol_show false)
+(defvar bri_show false)
+(defvar cal_open false)
+
+(defwidget sidestuff []
+  (box :class "sidestuff" :orientation "h" :space-evenly false :halign "end"
+    (button :class "network ${network_class}"
+        :tooltip "${network_name} (Press to open nmtui)"
+        :onclick "kitty -e nmtui &"
+        network_icon)
+    (sep)
+    (hide-control
+      :var_name "vol_show"
+      :var_value vol_show
+      :icon "  "
+      :value volume
+      :onchange set_volume_cmd
+      :custom-class "volume_label"
+    )
+    (sep)
+    (hide-control
+      :var_name "bri_show"
+      :var_value bri_show
+      :icon "󰃠 "
+      :value {brightness * 100/ brightness_max}
+      :onchange set_brightness_cmd
+      :custom-class "brightness_label"
+    )
+    (sep)
+    (circ_control
+      :icon "  "
+      :value {battery}
+      :custom-class "battery_label"
+      :custom-circ "battery_control"
+      :info-text " : ${battery}%")
+    (circ_control
+      :icon "  "
+      :value {round(EWW_RAM.used_mem_perc, 2)} 
+      :custom-class "ram_label"
+      :custom-circ "ram_control"
+      :info-text " : ${round(EWW_RAM.used_mem_perc, 2)}%")
+    (systray
+      :spacing 5
+      :icon-size 20
+      :prepend_new true)))
+
+(deflisten workspace "./scripts/workspaces.sh")
+(defwidget workspaces []
+  (literal :content workspace))
+
+(defwidget hide-control [var_name var_value icon value onchange custom-class ]
+  (eventbox
+      ;; uncomment the following lines to enable hover events
+      ;; :onhover "eww update ${var_name}=${!var_value}"
+      ;; :onhoverlost "eww update ${var_name}=${!var_value}"
+      :onclick "eww update ${var_name}=${!var_value}"
+    (box :orientation "h"
+         :space-evenly "false"
+         :spacing "2"
+      (box :class custom-class icon)
+      (revealer
+        :reveal var_value
+        :transition "slideright"
+        :duration "550ms"
+        (box :class "metric"
+          (scale
+             :min 0
+             :max 101
+             :active true
+             :value value
+             :onchange onchange)
+)))))
+
+(defwidget circ_control [icon value custom-class custom-circ info-text ]
+    (box
+      :class "circle_control_container"
+      :vexpand "false" 
+      :hexpand "false" 
+      (box :class custom-class icon)
+      (circular-progress :value {value}
+        :height 25
+        :width 25
+        :class custom-circ
+        :thickness 4
+      (button 
+          :class "inner_circle_control"
+          :limit-width 2
+          :tooltip info-text
+          :show_truncated false
+          :wrap false
+          ""))))
+
+(defwidget sep []
+  (label :class "sep" :text ""))
+
+(defwidget metric [label value onchange]
+  (box :orientation "h"
+       :class "metric"
+       :space-evenly false
+    (box :class "label" label)
+    (scale :min 0
+           :max 101
+           :active {onchange != ""}
+           :value value
+           :onchange onchange)))

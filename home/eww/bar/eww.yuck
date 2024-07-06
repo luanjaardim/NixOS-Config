@@ -1,0 +1,29 @@
+
+(defwindow bar
+  :windowtype "dock"
+  :geometry (geometry :x "0%"
+                      :y "0.4%"
+                      :width "95%"
+                      :height "40px"
+                      :anchor "top center")
+  :reserve (struts :side "top" :distance "4%")
+  (bar))
+
+(defwindow cal
+  :windowtype "normal"
+  :wm-ignore true
+  :geometry (geometry
+    :y "6%"
+    :width "10%"
+    :height "10%"
+    :anchor "top center")
+  :reserve (struts :side "top" :distance "5%")
+  (eventbox
+    :class "cal"
+    :onhoverlost "eww close cal; eww update cal_open=false"
+    (revealer
+      :reveal cal_open
+      :transition "fade"
+      :duration "550ms"
+    (calendar)))
+  )
