@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # This script is used to check the battery status of the laptop
 # returnig the battery percentage and notifying the user if the battery is low or full

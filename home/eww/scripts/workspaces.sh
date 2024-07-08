@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 
 # Checks if a list ($1) contains an element ($2)
 contains() {

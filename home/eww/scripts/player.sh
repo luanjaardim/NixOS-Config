@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 pctl="playerctl --player=spotify,%any metadata --format "
 if [ "$1" == "info" ]; then

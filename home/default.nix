@@ -9,7 +9,6 @@ in
   home.homeDirectory = "/home/lan";
 
   imports = [
-    ./eww
     ./rofi
     ./sxhkd
     ./bspwm
@@ -97,12 +96,15 @@ in
     killall
 
     # Other programs
-    eww
     rofi
     dunst
   ];
 
   programs = {
+    eww = {
+      enable = true;
+      configDir = ./eww;
+    };
     # basic configuration of git
     git = {
       enable = true;
@@ -133,6 +135,7 @@ in
       shellAbbrs = {
         l = "ls -la";
 	c = "cd ..";
+        nv = "nvim";
 	gits = "git status";
 	gitl = "git log --oneline --graph --all";
 	gitc = "git commit -m";
