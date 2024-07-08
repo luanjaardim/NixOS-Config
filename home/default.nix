@@ -8,20 +8,6 @@ in
   home.username = "lan";
   home.homeDirectory = "/home/lan";
 
-  # link the configuration file in current directory to the specified location in home directory
-  # home.file.".config/i3/wallpaper.jpg".source = ./wallpaper.jpg;
-
-  # link all files in `./scripts` to `~/.config/i3/scripts`
-  # home.file.".config/i3/scripts" = {
-  #   source = ./scripts;
-  #   recursive = true;   # link recursively
-  #   executable = true;  # make all files executable
-  # };
-
-  # encode the file content in nix configuration file directly
-  # home.file.".xxx".text = ''
-  #     xxx
-  # '';
   imports = [
     ./eww
     ./rofi
@@ -34,6 +20,20 @@ in
   xresources.properties = {
     "Xcursor.size" = 16;
     "Xft.dpi" = 172;
+  };
+  services.picom = {
+    enable = true;
+    activeOpacity = 0.95;
+    inactiveOpacity = 0.85;
+    settings = {
+      animations = true;
+      blur = {
+        method = "dual-kawase";
+	size = 9;
+	background = true;
+      };
+      corner-radius = 11;
+    };
   };
 
   # Packages that should be installed to the user profile.
@@ -135,6 +135,7 @@ in
 	gitl = "git log --oneline --graph --all";
 	gitc = "git commit -m";
       };
+      shellInit = "set fish_greeting";
     };
     kitty = {
       enable = true;
