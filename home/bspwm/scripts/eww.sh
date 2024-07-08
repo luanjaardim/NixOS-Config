@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-pgrep -x eww > /dev/null || eww daemon &
+[ `eww ping` == "pong" ] || eww daemon &
 
 # open windows from eww
 eww open bar && rm $HOME/.config/eww/scripts/.bat_tmp # bat_tmp for battery script

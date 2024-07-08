@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 winds="main pfp time player sys_usg controls buttons slogan"
-pgrep -x eww > /dev/null || exit 1
+[ `eww ping` == "pong" ] || exit 1
 
 [ $(eww get panel_visible) = "true" ] &&
 eww close $winds && \

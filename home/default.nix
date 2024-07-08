@@ -14,6 +14,7 @@ in
     ./sxhkd
     ./bspwm
     ./dunst
+    ./neovim
   ];
 
   # set cursor size and dpi for 4k monitor
@@ -27,12 +28,12 @@ in
     inactiveOpacity = 0.85;
     settings = {
       animations = true;
+      corner-radius = 10;
       blur = {
         method = "dual-kawase";
 	size = 9;
 	background = true;
       };
-      corner-radius = 11;
     };
   };
 
@@ -93,6 +94,7 @@ in
     ethtool
     pciutils # lspci
     usbutils # lsusb
+    killall
 
     # Other programs
     eww

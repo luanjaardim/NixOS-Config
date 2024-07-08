@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+[ `eww ping` == "pong" ] || eww daemon &
 bar_state="$(dirname $0)/.bar_tog_tmp"
 
 ([ `eww get bar_visible` = "true" ] \

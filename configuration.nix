@@ -92,8 +92,12 @@
     neovim
     wget
     git
+    # notification lib packages
     libnotify
     glib
+
+    xclip
+    gcc
   ];
 
   fonts.packages = with pkgs; [
