@@ -39,7 +39,6 @@ in
   # Packages that should be installed to the user profile.
   home.packages = with pkgs; [
     neofetch
-    nnn # terminal file manager
 
     # archives
     zip
@@ -98,6 +97,7 @@ in
     # Other programs
     rofi
     dunst
+    yazi    # terminal file manager
   ];
 
   programs = {
@@ -145,9 +145,11 @@ in
     kitty = {
       enable = true;
       font = {
-  	name = "JetBrainsMono";
-	size = 12;
+          name = "JetBrainsMono";
+          size = 12;
       };
+      shellIntegration.enableFishIntegration = true;
+      theme = "Tokyo Night Moon";
     };
     # alacritty - a cross-platform, GPU-accelerated terminal emulator
     alacritty = {
