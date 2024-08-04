@@ -5,7 +5,6 @@ let
   user = outputs.vars.user;
 in
 {
-  # TODO please change the username & home directory to your own
   home.username = "${user}";
   home.homeDirectory = "/home/${user}";
 
@@ -15,6 +14,7 @@ in
     ./bspwm
     ./dunst
     ./neovim
+    ./firefox
   ];
 
   # set cursor size and dpi for 4k monitor
@@ -22,7 +22,13 @@ in
     "Xcursor.size" = 16;
     "Xft.dpi" = 172;
   };
+
+  home.sessionVariables = {
+    EDITOR = "nvim";
+  };
+
   services.picom = {
+    package = pkgs.picom-next;
     enable = true;
     activeOpacity = 0.95;
     inactiveOpacity = 0.85;
@@ -98,7 +104,7 @@ in
     # Other programs
     rofi
     dunst
-    yazi    # terminal file manager
+    yazi    # Terminal file manager
   ];
 
   programs = {
@@ -131,6 +137,7 @@ in
         ];
       };
     };
+
     fish = {
       enable = true;
       shellAbbrs = {
@@ -143,6 +150,7 @@ in
       };
       shellInit = "set fish_greeting";
     };
+
     kitty = {
       enable = true;
       font = {
@@ -169,6 +177,7 @@ in
         selection.save_to_clipboard = true;
       };
     };
+
   };
 
   # This value determines the home Manager release that your

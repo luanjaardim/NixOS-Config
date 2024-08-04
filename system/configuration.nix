@@ -67,7 +67,7 @@ in
   programs.fish.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  "users.users.${user}" = with pkgs; {
+  users.users."${user}" = with pkgs; {
     isNormalUser = true;
     extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
     shell = pkgs.fish;
