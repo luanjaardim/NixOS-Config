@@ -1,12 +1,13 @@
-{ config, pkgs, ... }:
+{ config, pkgs, outputs, ... }:
 
 let 
- lib = pkgs.lib;
+  lib = pkgs.lib;
+  user = outputs.vars.user;
 in
 {
   # TODO please change the username & home directory to your own
-  home.username = "lan";
-  home.homeDirectory = "/home/lan";
+  home.username = "${user}";
+  home.homeDirectory = "/home/${user}";
 
   imports = [
     ./rofi
