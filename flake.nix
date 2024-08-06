@@ -28,6 +28,7 @@
       user = "jaardim";
       hostname = "nixos";
       system = "x86_64-linux";
+      prompt = "pure.toml";
     };
     # NixOS configuration entrypoint
     # Available through 'nixos-rebuild --flake .#your-hostname'

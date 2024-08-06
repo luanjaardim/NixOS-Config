@@ -94,8 +94,8 @@ in
     libnotify
     glib
 
+    # clipboard
     xclip
-    gcc
   ];
 
   fonts.packages = with pkgs; [

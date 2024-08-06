@@ -14,6 +14,7 @@ in
     ./bspwm
     ./dunst
     ./neovim
+    ./starship
     ./firefox
   ];
 
@@ -102,9 +103,9 @@ in
     killall
 
     # Other programs
-    rofi
-    dunst
-    yazi    # Terminal file manager
+    rofi      # App launcher
+    dunst     # Notification app
+    yazi      # Terminal file manager
   ];
 
   programs = {
@@ -118,24 +119,9 @@ in
       userName = "luanjaardim";
       userEmail = "luang.ajardim@gmail.com";
     };
-    # starship - an customizable prompt for any shell
+    # Starship - an customizable prompt for any shell
     starship = {
       enable = true;
-      # custom settings
-      settings = {
-        add_newline = false;
-        aws.disabled = true;
-        gcloud.disabled = true;
-        line_break.disabled = true;
-
-	character = {
-	  success_symbol = "➜";
-	  error_symbol = "➜";
-	};
-        format = lib.concatStrings [
-          " [󰘧](bold bright-white) " "\\[ $directory\\] " "$all"
-        ];
-      };
     };
 
     fish = {
@@ -155,7 +141,7 @@ in
       enable = true;
       font = {
           name = "JetBrainsMono";
-          size = 12;
+          size = 11;
       };
       shellIntegration.enableFishIntegration = true;
       theme = "Tokyo Night Moon";
