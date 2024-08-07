@@ -13,7 +13,7 @@
 
     # Firefox Extensions
     firefox-addons = { 
-      url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons"; 
+      url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
       inputs.nixpkgs.follows = "nixpkgs"; 
     };
   };
@@ -22,38 +22,28 @@
   let
     inherit (self) outputs;
     lib = nixpkgs.lib;
+    settings = import ./utils/settings.nix;
   in
   {
-    vars = {
-      user = "jaardim";
-      hostname = "nixos";
-      system = "x86_64-linux";
-      prompt = "pure.toml";
-    };
     # NixOS configuration entrypoint
     # Available through 'nixos-rebuild --flake .#your-hostname'
     nixosConfigurations = {
-        # Xorg Nixos configuration
-        "x-${self.vars.hostname}" = nixpkgs.lib.nixosSystem {
-          specialArgs = {inherit inputs outputs;};
+        # Calls the configuration.nix file to built the system
+        "${settings.hostname}" = nixpkgs.lib.nixosSystem {
+          specialArgs = {inherit settings;};
           modules = [
-            # > Our main nixos configuration file <
             ./system/configuration.nix
           ];
-        };
-        # Wayland Nixos configuration
-        w-nixos = {
-          # TODO: make nixos config for wayland
         };
     };
 
     # Standalone home-manager configuration entrypoint
     # Available through 'home-manager --flake .#your-username@your-hostname'
     homeConfigurations = {
-        "${self.vars.user}@x-${self.vars.hostname}" = home-manager.lib.homeManagerConfiguration {
+        "${settings.user}@${settings.hostname}" = home-manager.lib.homeManagerConfiguration {
 
           pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
-          extraSpecialArgs = {inherit inputs outputs;};
+          extraSpecialArgs = {inherit inputs outputs settings;};
           modules = [ ./home ];
         };
     };

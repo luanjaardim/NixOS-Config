@@ -1,7 +1,7 @@
-{ config, pkgs, inputs, outputs, ... }:
+{ config, pkgs, inputs, settings, ... }:
 let
-  user = outputs.vars.user;
-  sys = outputs.vars.system;
+  user = settings.user;
+  sys = settings.system;
 in
 {
   programs.firefox = {

@@ -1,7 +1,7 @@
 # Starship - an customizable prompt for any shell
-{ outputs, ... }:
+{ settings, ... }:
 let
-  default_prompt = outputs.vars.prompt;
+  default_prompt = settings.prompt;
 in
 {
   home.file."./.config/starship.toml".source = ./presets/${default_prompt};

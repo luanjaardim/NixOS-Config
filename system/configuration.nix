@@ -1,8 +1,8 @@
-{ config, lib, pkgs, outputs, ... }:
+{ config, lib, pkgs, settings, ... }:
 
 let
-  user = outputs.vars.user;
-  hostname = outputs.vars.hostname;
+  user = settings.user;
+  hostname = settings.hostname;
 in
 {
   imports =
@@ -42,9 +42,17 @@ in
 
   # Enable the X11 windowing system.
   services.xserver = {
-	enable = true;
-	windowManager.bspwm.enable = true;
+    enable = true;
+    windowManager.bspwm.enable = true;
+    displayManager.lightdm = {
+      greeters.slick.enable = true;
+    };
   };
+
+  #programs.hyprland = {
+  #  enable = true;
+  #  xwayland.enable = true;
+  #};
 
   # Configure keymap in X11
   # services.xserver.xkb.layout = "us";
@@ -70,26 +78,22 @@ in
   users.users."${user}" = with pkgs; {
     isNormalUser = true;
     extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
-    shell = pkgs.fish;
-    packages = [
-      fish
-      firefox
-      tree
-    ];
+    initialPassword = "nixos"; # TODO: change this.
+    shell = fish;
   };
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
+  # List packages installed in system profile. For every user.
   environment.systemPackages = with pkgs; [
     bash
-    bspwm
-    sxhkd
-    dmenu
+    fish
+    firefox
+    tree
     feh
     kitty
     neovim
     wget
     git
+
     # notification lib packages
     libnotify
     glib

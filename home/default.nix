@@ -1,8 +1,8 @@
-{ config, pkgs, outputs, ... }:
+{ config, pkgs, settings, ... }:
 
-let 
+let
   lib = pkgs.lib;
-  user = outputs.vars.user;
+  user = settings.user;
 in
 {
   home.username = "${user}";
@@ -10,13 +10,15 @@ in
 
   imports = [
     ./rofi
-    ./sxhkd
-    ./bspwm
     ./dunst
     ./neovim
     ./starship
     ./firefox
-  ];
+  ] ++
+  (if settings.wm == "bspwm" then
+    [ ./bspwm ./sxhkd ]
+  else
+    [ ./hypr ]);
 
   # set cursor size and dpi for 4k monitor
   xresources.properties = {
@@ -104,6 +106,7 @@ in
 
     # Other programs
     rofi      # App launcher
+    dmenu     # Simpler App launcher
     dunst     # Notification app
     yazi      # Terminal file manager
   ];
