@@ -24,7 +24,7 @@ in
   networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
 
   # Set your time zone.
-  # time.timeZone = "Europe/Amsterdam";
+  time.timeZone = "America/Recife";
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -43,16 +43,12 @@ in
   # Enable the X11 windowing system.
   services.xserver = {
     enable = true;
+    videoDrivers = [ "intel" ];
     windowManager.bspwm.enable = true;
-    displayManager.lightdm = {
-      greeters.slick.enable = true;
-    };
+    #displayManager.lightdm = {
+    #  greeters.slick.enable = true;
+    #};
   };
-
-  #programs.hyprland = {
-  #  enable = true;
-  #  xwayland.enable = true;
-  #};
 
   # Configure keymap in X11
   # services.xserver.xkb.layout = "us";
@@ -70,7 +66,7 @@ in
   };
 
   # Enable touchpad support (enabled default in most desktopManager).
-  # services.libinput.enable = true;
+  services.libinput.enable = true;
 
   programs.fish.enable = true;
 
@@ -106,6 +102,8 @@ in
     jetbrains-mono
     (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
   ];
+
+  nixpkgs.config.allowUnfree = true;
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

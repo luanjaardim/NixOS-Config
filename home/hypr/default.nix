@@ -2,6 +2,9 @@
 
 {
   wayland.windowManager.hyprland = {
+    enable = true;
+    xwayland.enable = true;
+
     settings = {
       decoration = {
         rounding = 10;
@@ -27,7 +30,7 @@
 
       $terminal = kitty
       $fileManager = thunar
-      $menu = wofi --show drun
+      $menu = rofi -show drun
       $bar = waybar
 
       # Some default env vars.
@@ -90,10 +93,6 @@
           preserve_split = yes # you probably want this
       }
 
-      master {
-          # See https://wiki.hyprland.org/Configuring/Master-Layout/ for more
-          new_is_master = true
-      }
 
       gestures {
           # See https://wiki.hyprland.org/Configuring/Variables/ for more

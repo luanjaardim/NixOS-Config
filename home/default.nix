@@ -62,6 +62,7 @@ in
     eza # A modern replacement for ‘ls’
     fzf # A command-line fuzzy finder
     brightnessctl # brightness controller
+    alsa-utils # audio control
     playerctl # music player
 
     # networking tools
@@ -104,11 +105,13 @@ in
     usbutils # lsusb
     killall
 
-    # Other programs
-    rofi      # App launcher
+    # Utility programs
     dmenu     # Simpler App launcher
     dunst     # Notification app
     yazi      # Terminal file manager
+
+    # Other programs
+    anydesk
   ];
 
   programs = {
