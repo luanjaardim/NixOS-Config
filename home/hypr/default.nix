@@ -6,103 +6,141 @@
     xwayland.enable = true;
 
     settings = {
-      decoration = {
-        rounding = 10;
+        exec-once = [
+            #"set wallpaper here..."
+        ];
 
-        blur = {
-          enabled = true;
-          size = 7;
-          passes = 1;
+        general = {
+            "$mod" = "SUPER";
+            "$terminal" = "kitty";
+            "$file-manager" = "yazi";
+            "$sys_monitor" = "btop";
+            "$menu" = "rofi -show drun";
+            gaps_in = 3;
+            gaps_out = 5;
+            no_focus_fallback = true;
+            resize_on_border = true;
+            layout = "master";
+            no_border_on_floating = true;
+            "col.active_border" = "rgba(33ccffee) rgba(00ff99ee) 45deg";
+            "col.inactive_border" = "rgba(595959aa)";
         };
 
-        active_opacity = 0.96;
-        inactive_opacity = 0.90;
-      };
+        input = {
+            kb_layout = "us,br";
+            kb_options="grp:toggle";
+            follow_mouse = 1;
+            touchpad = {
+                natural_scroll = "no";
+                # right click with two fingers press
+                clickfinger_behavior = true;
+            };
+        };
+
+        decoration = {
+            rounding = 5;
+            blur = {
+                enabled = true;
+                size = 7;
+                passes = 1;
+            };
+            active_opacity = 0.97;
+            inactive_opacity = 0.90;
+
+            drop_shadow = true;
+
+            shadow_ignore_window = true;
+            shadow_offset = "0 2";
+            shadow_range = 20;
+            shadow_render_power = 3;
+            "col.shadow" = "rgba(00000055)";
+        };
+
+        animations = {
+            enabled = true;
+            # ...
+        };
+
+        # Bindings for keyboard
+        bind = [
+            "$mod, RETURN, exec, $terminal"
+            "$mod, Y, exec, $file-manager"
+            "$mod, B, exec, $sys_monitor"
+            "$mod, SPACE, exec, $menu"
+            "$mod, Q, killactive"
+            "$mod, S, togglefloating"
+            "$mod, F, fullscreen"
+
+            # Move focus to neighbour window
+            "$mod, h, movefocus, l"
+            "$mod, l, movefocus, r"
+            "$mod, k, movefocus, u"
+            "$mod, j, movefocus, d"
+
+            # Switch windows positions
+            "$mod SHIFT, h, swapwindow, l"
+            "$mod SHIFT, l, swapwindow, r"
+            "$mod SHIFT, k, swapwindow, u"
+            "$mod SHIFT, j, swapwindow, d"
+
+            # Increase window size
+            "$mod ALT, h, resizeactive, -10 0"
+            "$mod ALT, l, resizeactive, 10 0"
+            "$mod ALT, k, resizeactive, 0 -10 "
+            "$mod ALT, j, resizeactive, 0 10"
+
+            # Decrease window size
+            "$mod ALT SHIFT, h, resizeactive, 10 0"
+            "$mod ALT SHIFT, l, resizeactive, -10 0"
+            "$mod ALT SHIFT, k, resizeactive, 0 10 "
+            "$mod ALT SHIFT, j, resizeactive, 0 -10"
+
+            ] ++
+            # Generating move to workspace and send window to workspace
+            (builtins.concatLists (
+                builtins.genList (x:
+                   let
+                    ws = builtins.toString (x+1);
+                   in
+                   [ "$mod, ${ws}, workspace, ${ws}"
+                   "$mod SHIFT, ${ws}, movetoworkspace, ${ws}" ])
+                9)) ++ [
+
+            #Brigthness
+            ",XF86MonBrightnessDown,exec,brightnessctl set 5%-"
+            ",XF86MonBrightnessUp,exec,brightnessctl set +5%"
+
+            #Audio
+            ",XF86AudioRaiseVolume,exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+"
+            ",XF86AudioLowerVolume,exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
+
+            #Screenshot
+            ''
+            $mod, Print, exec, grim -g "$(slurp -d)" "$HOME/pictures/screenshots/$(date '+%y%m%d_%H-%M-%S').png"
+            ''
+            '', Print, exec, grim -g "$(slurp -d)" - | wl-copy''
+        ];
+
+        # Bindings for mouse
+        bindm = [
+            # Move window with left button
+            "$mod, mouse:272, movewindow"
+            # Resize window with right button
+            "SUPER_CTRL, mouse:272, resizewindow"
+        ];
+
     };
 
     extraConfig = ''
       monitor=,preferred,auto,auto
 
-
-      # exec-once = waybar & hyprpaper & firefox
-
-      # source = ~/.config/hypr/myColors.conf
-
-      $terminal = kitty
-      $fileManager = thunar
-      $menu = rofi -show drun
-      $bar = waybar
-
       # Some default env vars.
       env = XCURSOR_SIZE,24
       env = QT_QPA_PLATFORMTHEME,qt5ct # change to qt6ct if you have that
-
-      # For all categories, see https://wiki.hyprland.org/Configuring/Variables/
-      input {
-          kb_layout = us,br
-          kb_variant =
-          kb_model =
-          kb_options=grp:alt_shift_toggle
-          kb_rules =
-
-          follow_mouse = 1
-
-          touchpad {
-              natural_scroll = no
-          }
-
-          sensitivity = 0 # -1.0 to 1.0, 0 means no modification.
-      }
-
-      general {
-          # See https://wiki.hyprland.org/Configuring/Variables/ for more
-
-          gaps_in = 5
-          gaps_out = 10
-          border_size = 1
-          col.active_border = rgba(33ccffee) rgba(00ff99ee) 45deg
-          col.inactive_border = rgba(595959aa)
-          no_focus_fallback = true
-          no_border_on_floating = true
-          resize_on_border = true
-
-          layout = dwindle
-
-          # Please see https://wiki.hyprland.org/Configuring/Tearing/ before you turn this on
-          allow_tearing = false
-      }
-
-      animations {
-          enabled = yes
-
-          # Some default animations, see https://wiki.hyprland.org/Configuring/Animations/ for more
-
-          bezier = myBezier, 0.05, 0.9, 0.1, 1.05
-
-          animation = windows, 1, 7, myBezier
-          animation = windowsOut, 1, 7, default, popin 80%
-          animation = border, 1, 10, default
-          animation = borderangle, 1, 8, default
-          animation = fade, 1, 7, default
-          animation = workspaces, 1, 6, default
-      }
-
-      dwindle {
-          # See https://wiki.hyprland.org/Configuring/Dwindle-Layout/ for more
-          pseudotile = yes # master switch for pseudotiling. Enabling is bound to mainMod + P in the keybinds section below
-          preserve_split = yes # you probably want this
-      }
-
-
       gestures {
           # See https://wiki.hyprland.org/Configuring/Variables/ for more
           workspace_swipe = on
           workspace_swipe_forever = true
-      }
-
-      misc {
-          # See https://wiki.hyprland.org/Configuring/Variables/ for more
-          force_default_wallpaper = 0 # Set to 0 or 1 to disable the anime mascot wallpapers
       }
 
       # Example per-device config
@@ -112,96 +150,11 @@
           sensitivity = -0.5
       }
 
-      # Example windowrule v1
-      # windowrule = float, ^(kitty)$
-      # Example windowrule v2
-      # windowrulev2 = float,class:^(kitty)$,title:^(kitty)$
-      # See https://wiki.hyprland.org/Configuring/Window-Rules/ for more
       windowrulev2 = suppressevent maximize, class:.* # You'll probably like this.
 
-
-      # See https://wiki.hyprland.org/Configuring/Keywords/ for more
-      $mainMod = SUPER
-
-      # Example binds, see https://wiki.hyprland.org/Configuring/Binds/ for more
-      bind = $mainMod, RETURN, exec, $terminal
-      bind = $mainMod, Q, killactive
-      bind = $mainMod, M, exit
-      bind = $mainMod, E, exec, $fileManager
-      bind = $mainMod SHIFT, W, exec, ~/.config/waybar/setup.sh
-      bind = $mainMod, V, togglefloating 
-      bind = $mainMod, SPACE, exec, $menu
-      bind = $mainMod, P, pseudo # dwindle
-      bind = $mainMod, F, fullscreen # dwindle
-
-      bind = $mainMod, h, movefocus, l
-      bind = $mainMod, l, movefocus, r
-      bind = $mainMod, k, movefocus, u
-      bind = $mainMod, j, movefocus, d
-
-      bind = $mainMod SHIFT, h, swapwindow, l
-      bind = $mainMod SHIFT, l, swapwindow, r
-      bind = $mainMod SHIFT, k, swapwindow, u
-      bind = $mainMod SHIFT, j, swapwindow, d
-
-      bind = $mainMod ALT, h, resizeactive, -10 0
-      bind = $mainMod ALT, l, resizeactive, 10 0
-      bind = $mainMod ALT, k, resizeactive, 0 -10 
-      bind = $mainMod ALT, j, resizeactive, 0 10
-
-      # Switch workspaces with mainMod + [0-9]
-      bind = $mainMod, 1, workspace, 1
-      bind = $mainMod, 2, workspace, 2
-      bind = $mainMod, 3, workspace, 3
-      bind = $mainMod, 4, workspace, 4
-      bind = $mainMod, 5, workspace, 5
-      # bind = $mainMod, 6, workspace, 6
-      # bind = $mainMod, 7, workspace, 7
-      # bind = $mainMod, 8, workspace, 8
-      # bind = $mainMod, 9, workspace, 9
-      # bind = $mainMod, 0, workspace, 10
-
-      # Move active window to a workspace with mainMod + SHIFT + [0-9]
-      bind = $mainMod SHIFT, 1, movetoworkspace, 1
-      bind = $mainMod SHIFT, 2, movetoworkspace, 2
-      bind = $mainMod SHIFT, 3, movetoworkspace, 3
-      bind = $mainMod SHIFT, 4, movetoworkspace, 4
-      bind = $mainMod SHIFT, 5, movetoworkspace, 5
-      # bind = $mainMod SHIFT, 6, movetoworkspace, 6
-      # bind = $mainMod SHIFT, 7, movetoworkspace, 7
-      # bind = $mainMod SHIFT, 8, movetoworkspace, 8
-      # bind = $mainMod SHIFT, 9, movetoworkspace, 9
-      # bind = $mainMod SHIFT, 0, movetoworkspace, 10
-
-      # Example special workspace (scratchpad)
-      bind = $mainMod, S, togglespecialworkspace, magic
-      bind = $mainMod SHIFT, S, movetoworkspace, special:magic
-
-      # Scroll through existing workspaces with mainMod + scroll
-      bind = $mainMod, mouse_down, workspace, e+1
-      bind = $mainMod, mouse_up, workspace, e-1
-
-      # Move/resize windows with mainMod + LMB/RMB and dragging
-      bindm = $mainMod, mouse:272, movewindow
-      bindm = $mainMod, mouse:273, resizewindow
-
-      #Brigthness
-      bind=,XF86MonBrightnessDown,exec,brightnessctl set 5%-
-
-      bind=,XF86MonBrightnessUp,exec,brightnessctl set +5%
-
-      #Audio
-      bind=,XF86AudioRaiseVolume,exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+
-
-      bind=,XF86AudioLowerVolume,exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-
-
-      #ScreenShot
-      bind = $mainMod, Print, exec, grim -g "$(slurp -d)" "$HOME/pictures/screenshots/$(date '+%y%m%d_%H-%M-%S').png"
-      bind = , Print, exec, grim -g "$(slurp -d)" - | wl-copy
-
-      #Startup System apps
-      exec-once=hyprpaper
-      exec-once=~/.config/waybar/setup.sh
+      xwayland {
+        force_zero_scaling = true
+      }
     '';
 
   };

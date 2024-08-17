@@ -7,6 +7,7 @@ in
 {
   home.username = "${user}";
   home.homeDirectory = "/home/${user}";
+  nixpkgs.config.allowUnfree = true;
 
   imports = [
     ./rofi
@@ -28,6 +29,8 @@ in
 
   home.sessionVariables = {
     EDITOR = "nvim";
+    # For hyprland running Electron apps
+    NIXOS_OZONE_WL = "1";
   };
 
   services.picom = {
@@ -48,8 +51,6 @@ in
 
   # Packages that should be installed to the user profile.
   home.packages = with pkgs; [
-    neofetch
-
     # archives
     zip
     xz
@@ -63,6 +64,7 @@ in
     fzf # A command-line fuzzy finder
     brightnessctl # brightness controller
     alsa-utils # audio control
+    acpi # battery control
     playerctl # music player
 
     # networking tools
@@ -112,6 +114,19 @@ in
 
     # Other programs
     anydesk
+    spotify
+    discord
+
+    # Hyprland programs
+    hyprpaper
+    wl-clipboard
+    wayland-utils
+    wayland-protocols
+    wlroots
+    meson
+    grim
+    slurp
+
   ];
 
   programs = {
@@ -136,6 +151,7 @@ in
         l = "ls -la";
 	c = "cd ..";
         nv = "nvim";
+        y = "yazi .";
 	gits = "git status";
 	gitl = "git log --oneline --graph --all";
 	gitc = "git commit -m";
