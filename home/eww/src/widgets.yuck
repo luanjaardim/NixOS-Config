@@ -3,7 +3,7 @@
 ;
 
 (defwidget main []
-  (box :class "bg" :orientation "h" :space-evenly "false"))
+  (box :namespace "eww" :class "bg" :orientation "h" :space-evenly "false"))
 
 (defwidget profile []
   (box :orientation "v" :spacing 20 :space-evenly "false" :vexpand "false" :hexpand "false" 
@@ -14,9 +14,9 @@
 ))))
 
 ; TODO: refactor this
-(defwidget time [] 
+(defwidget time [ ?trans ] 
 		(box
-             :class "sub_bg"
+             :class "${ trans == "" ? "sub_bg" : ""}"
              :orientation "v" 
              :space-evenly "false" 
              :vexpand "false" 
@@ -80,8 +80,8 @@
 
 ;;music player
 (defvar pctl "playerctl --player=spotify,%any")
-(defwidget player []
-  (box :orientation "v" :spacing 7 :class "sub_bg"
+(defwidget player [ ?trans ]
+  (box :orientation "v" :spacing 7 :class "${ trans == "" ? "sub_bg" : ""}"
     (label :class "music_info" :text {music_info} :limit-width 400)
     (box :class "vol_bar"
       (scale
@@ -105,7 +105,8 @@
 ;; power buttons
 (defwidget buttons []
   (box :class "btn_container"
-    :orientation "h" :space-evenly "true" 
+    :orientation "h" :space-evenly "true"
+    (but :icon "  " :but-class "btn_logout" :command "./scripts/rofi.sh")
     (but :icon " 󰗽 " :but-class "btn_logout" :command "bspc quit")
     (but :icon " 󰤄 " :but-class "btn_sleep" :command "systemctl suspend")
     (but :icon "  " :but-class "btn_reboot" :command "systemctl reboot")
@@ -164,6 +165,8 @@
 ;
 
 (defvar bar_visible true) ; used on sxhkd/scripts to toggle bar visibility
+(defvar program_name "")  ; updated is scripts/workspace.sh, name of the current application
+(defvar program_desc "")  ; updated is scripts/workspace.sh, desc of application
 
 (defwidget bar []
   (eventbox
@@ -171,11 +174,19 @@
     (centerbox
         :class "bar"
         :orientation "h"
+      (box :space-evenly false
       (workspaces)
       (button
         :class "time"
         :onclick "eww ${cal_open ? "close" : "open" } cal; eww update cal_open=${!cal_open}"
         "   ${time_hour}:${time_min} ${time_mer}, ${time_day_name} ${time_day}")
+      )
+      (button
+        :onclick "./scripts/rofi.sh"
+        (label
+        :class "active_program"
+        :limit-width 50
+        :text "${program_name} : ${program_desc}"))
       (sidestuff))))
 
 (defvar vol_show false)
@@ -221,8 +232,7 @@
       :info-text " : ${round(EWW_RAM.used_mem_perc, 2)}%")
     (systray
       :spacing 5
-      :icon-size 20
-      :prepend_new true)))
+      :icon-size 20)))
 
 (deflisten workspace "./scripts/workspaces.sh")
 (defwidget workspaces []
@@ -230,9 +240,9 @@
 
 (defwidget hide-control [var_name var_value icon value onchange custom-class ]
   (eventbox
-      ;; uncomment the following lines to enable hover events
-      ;; :onhover "eww update ${var_name}=${!var_value}"
-      ;; :onhoverlost "eww update ${var_name}=${!var_value}"
+      ;; uncomment/comment the following two lines to enable/disable hover events
+      :onhover "eww update ${var_name}=${!var_value}"
+      :onhoverlost "eww update ${var_name}=${!var_value}"
       :onclick "eww update ${var_name}=${!var_value}"
     (box :orientation "h"
          :space-evenly "false"

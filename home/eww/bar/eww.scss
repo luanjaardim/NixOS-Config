@@ -11,7 +11,7 @@ tooltip label {
 
 //Global Styles
 .bar {
-  background-color: $black;
+  background-color: rgba($black, 0.35);
   border-radius: 15px;
   border: 0.5px solid $grey;
   color: #b0b4bc;
@@ -110,8 +110,13 @@ scale trough {
 
 .time {
   padding: 0px 10px 0px 10px;
-  font-size: 17px;
+  font-size: 15px;
   color: $white;
+}
+
+.active_program {
+  font-size: 17px;
+  padding: 0px 10px 0px 10px;
 }
 
 .cal {
@@ -125,7 +130,7 @@ scale trough {
 .workspaces {
   font-family: "JetBrains Mono";
   font-size: 17px;
-  padding-top: 2px;
+  padding-top: 0.5px;
 
   button {
     margin: 0px 3px;

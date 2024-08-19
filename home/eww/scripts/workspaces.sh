@@ -1,56 +1,65 @@
 #!/usr/bin/env sh
 
-# Checks if a list ($1) contains an element ($2)
-contains() {
-    for e in $1; do
-        [ "$e" -eq "$2" ] && echo 1 && return 
-    done
-    echo 0
-}
-
 print_workspaces() {
     buf=""
-    desktops=$(bspc query -D --names)
-    focused_desktop=$(bspc query -D -d focused --names)
-    occupied_desktops=$(bspc query -D -d .occupied --names)
-    urgent_desktops=$(bspc query -D -d .urgent --names)
-    
-    for d in $desktops; do
-        if [ "$(contains "$focused_desktop" "$d")" -eq 1 ]; then
-            ws=$d
+    focused_desktop=$2
+    occupied_desktops=$1
+
+    for d in $(seq 1 5); do
+        if [ "$d" == "$focused_desktop" ]; then
+            ws="$d"
             icon=" "
             class="focused"
-        elif [ "$(contains "$occupied_desktops" "$d")" -eq 1 ]; then
-            ws=$d
+        elif [ -n "$(echo "$occupied_desktops" | rg "$d")" ]; then
+            ws="$d"
             icon=" "
             class="occupied"
-        elif [ "$(contains "$urgent_desktops" "$d")" -eq 1 ]; then
-            ws=$d
-            icon=" "
-            class="urgent"
-        else 
-            ws=$d
+        else
+            ws="$d"
             icon=" "
             class="empty"
         fi
 
         buf="$buf (eventbox :cursor \"hand\" \
             (button \
-                    :class \"$class\" \
-                    :onclick \"bspc desktop -f $ws\" \"$icon\" \
-            ))"
+            :class \"$class\" \
+            :onclick \"hyprctl dispatch workspace $ws\" \"$icon\"))"
     done
 
     echo "(box :class \"workspaces\"        \
                 :space-evenly \"false\"     \
                 :halign \"start\"            \
-                $buf                        \
-        )"
+                $buf)"
 }
 
-# Listen to bspwm changes
-print_workspaces
-bspc subscribe desktop node_transfer | while read -r _ ; do
-print_workspaces
+print_workspaces "1" "1"
+# Listen to hypr sock
+socat -u UNIX-CONNECT:$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock - | while read -r line
+do
+    update=false
+
+    # Update the workspaces that have windows
+    # and update the focused workspace
+    if [ -n "$(echo $line | rg "movewindow>>")" ] \
+       || [ -n "$(echo $line | rg "openwindow>>")" ] \
+       || [ -n "$(echo $line | rg "closewindow>>")" ] \
+       || [ -n "$(echo $line | rg "focusedmon>>")" ] \
+       || [ -n "$(echo $line | rg "workspace>>")" ] \
+       || [ -z "$occup_winds" ]
+    then
+        occup_winds="$(hyprctl clients -j | rg "\"id\":" | rg -o "\d")"
+        activ_wind="$(hyprctl activewindow -j | rg "\"id\":" | rg -o "\d")"
+        print_workspaces "$occup_winds" "$activ_wind"
+    fi
+
+    # Get the title from the activewindow and update title variable
+    if [ -n "$(echo $line | rg "activewindow>>")" ]
+    then
+        name="$(echo $line | rg -o ">>.*,")"
+        desc="$(echo $line | rg -o ",.*")"
+        eww update program_name="${name:2:-1}"
+        eww update program_desc="${desc:1}"
+    fi
 
 done
+

@@ -268,7 +268,7 @@ scale trough {
 
 // side panel main container
 .bg {
-  background-color: $bg-alt;
+  background-color: rgba($bg-alt, 0.35);
   border-radius: 10px;
   opacity: 0.9;
 }

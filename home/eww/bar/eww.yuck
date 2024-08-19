@@ -1,16 +1,21 @@
 
 (defwindow bar
   :windowtype "dock"
+  :monitor 0
+  :exclusive true
+  :namespace "eww"
   :geometry (geometry :x "0%"
                       :y "0.4%"
-                      :width "95%"
-                      :height "40px"
+                      ; Change the width percentage given the scale being used(hyrpland)
+                      :width "150%"
+                      :height "5%"
                       :anchor "top center")
   :reserve (struts :side "top" :distance "4%")
   (bar))
 
 (defwindow cal
   :windowtype "normal"
+  :monitor 0
   :wm-ignore true
   :geometry (geometry
     :y "6%"
