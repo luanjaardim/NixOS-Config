@@ -1,12 +1,33 @@
 { config, pkgs, settings, ... }:
 
 {
+
+  imports = [
+    ./hyprpaper.nix
+  ];
+
+  home.packages = with pkgs; [
+
+    # Hyprland programs
+    hyprpaper
+    wl-clipboard
+    wayland-utils
+    wayland-protocols
+    wlroots
+    meson
+    # Screenshot
+    grim
+    slurp
+  ];
+
   wayland.windowManager.hyprland = {
     enable = true;
     xwayland.enable = true;
 
     settings = {
         exec-once = [
+            "hyprpaper &"
+            "eww daemon; eww open bar; eww open workspace"
             #"set wallpaper here..."
         ];
 
@@ -61,13 +82,19 @@
             # ...
         };
 
+        misc = {
+            disable_hyprland_logo = true;
+            disable_splash_rendering = true;
+        };
+
         # Bindings for keyboard
         bind = [
             "$mod, RETURN, exec, $terminal"
-            "$mod, Y, exec, $file-manager"
-            "$mod, B, exec, $sys_monitor"
+            "$mod, Y, exec, kitty $file-manager"
+            "$mod, B, exec, kitty $sys_monitor"
             "$mod, SPACE, exec, $menu"
             "$mod, Q, killactive"
+            "$mod, M, exit"
             "$mod, S, togglefloating"
             "$mod, F, fullscreen"
 
@@ -104,7 +131,7 @@
                    in
                    [ "$mod, ${ws}, workspace, ${ws}"
                    "$mod SHIFT, ${ws}, movetoworkspace, ${ws}" ])
-                9)) ++ [
+                5)) ++ [
 
             #Brigthness
             ",XF86MonBrightnessDown,exec,brightnessctl set 5%-"
@@ -132,7 +159,8 @@
     };
 
     extraConfig = ''
-      monitor=,preferred,auto,auto
+      monitor=eDP-1,preferred,auto,1.2
+      monitor=HDMI-A-1,preferred,-1360x0,auto
 
       # Some default env vars.
       env = XCURSOR_SIZE,24
@@ -149,6 +177,10 @@
           name = epic-mouse-v1
           sensitivity = -0.5
       }
+
+      # Blur windows of eww that has the namespace 'eww'
+      layerrule = blur, eww
+      layerrule = ignorezero, eww
 
       windowrulev2 = suppressevent maximize, class:.* # You'll probably like this.
 
