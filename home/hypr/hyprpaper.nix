@@ -10,8 +10,8 @@
               [ "/home/jaardim/pictures/wallpaper.png" ];
 
             wallpaper = [
-              "DP-3,/home/jaardim/pictures/wallpaper.png"
-              "DP-1,/home/jaardim/pictures/wallpaper.png"
+              "eDP-1,/home/jaardim/pictures/wallpaper.png"
+              "HDMI-A-1,/home/jaardim/pictures/wallpaper.png"
             ];
         };
     };
