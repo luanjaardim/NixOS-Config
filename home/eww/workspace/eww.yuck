@@ -1,0 +1,24 @@
+
+; windown type doesn't work on wayland
+(defwindow workspace
+  :stacking "bg"
+  :monitor 0
+  :namespace "eww"
+  :geometry (geometry :anchor "right bottom"
+             :width "65%"
+             :height "50%"
+             :x "2%"
+             :y "2%")
+  (box :space-evenly false :class "bg"
+  (time :trans "yes")
+  (box :orientation "v"
+    (box :spacing 5 :orientation "h"
+        (pizza :text "CPU" :inner-text ""
+          :value {EWW_CPU.avg} :custom-text "t_cpu" :custom-circ "p_cpu")
+        (pizza :text "RAM" :inner-text ""
+          :value {EWW_RAM.used_mem_perc} :custom-text "t_ram" :custom-circ "p_ram")
+        (pizza :text "BAT" :inner-text ""
+          :value battery :custom-text "t_bat" :custom-circ "p_bat"))
+    (player :trans "yes")
+  )
+  ))

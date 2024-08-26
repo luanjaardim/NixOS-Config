@@ -6,7 +6,8 @@ symbol() {
 }
 
 name() {
-  iwgetid -r
+  # Get the name of the connection
+  nmcli -g NAME con | head -n 1
 }
 
 [ "$1" = "icon" ] && symbol

@@ -6,6 +6,11 @@
 	font-family: JetBrainsMono NF;
 }
 
+.panel-items {
+  background-color: rgba($black, 0.6);
+  padding: 10px;
+}
+
 
 /** tooltip!! **/
 tooltip.background {
@@ -268,13 +273,13 @@ scale trough {
 
 // side panel main container
 .bg {
-  background-color: rgba($bg-alt, 0.35);
+  background-color: rgba($bg-alt, 0.45);
   border-radius: 10px;
   opacity: 0.9;
 }
 
 .sub_bg {
-    background-color: $bg;
+    background-color: rgba($black, 0.3);
     padding: 10px;
 }
 
@@ -285,13 +290,12 @@ scale trough {
 
 // some shortcuts for: shutdown, reboot, sleep, logout
 .btn_container {
-  background-color: $bg;
-  border-radius: 10px;
+  @extend .panel-items;
   padding: 10px;
 }
 
 .vol_control_label, .bri_control_label, .mic_control_label {
-    font-size: 30px;
+    font-size: 20px;
     margin-right: 10px;
 }
 .vol_control_label {
@@ -317,9 +321,8 @@ scale trough {
 }
 
 .btn_logout, .btn_sleep, .btn_reboot, .btn_poweroff {
-	font-size : 48px;
-	font-weight : bold;
-  padding: 5px 10px 5px 10px;
+  font-size : 40px;
+  font-weight : bold;
 }
 .btn_logout {
 	color: $wgreen;
@@ -434,4 +437,47 @@ scale trough {
 .slogan {
   font-size: 24px;
   color: $wyellow;
+}
+
+// Calendar
+.cal-box {
+  @extend .panel-items;
+  font-family: Comic Mono;
+  font-size: 1em;
+  font-weight: bold;
+
+  .cal-inner-box {
+      padding: 1rem 1rem .2rem;
+
+      .cal {
+          &.highlight {
+              padding: 10rem;
+          }
+
+          padding: .8rem .25rem 0rem;
+          margin-left: 10px;
+      }
+  }
+
+  calendar:selected {
+    color: $blue;
+  }
+
+  calendar.header {
+  color: $blue;
+  font-weight: bold;
+  }
+
+  calendar.button {
+  color: $red;
+  }
+
+  calendar.highlight {
+  color: $red;
+  font-weight: bold;
+  }
+
+  calendar:indeterminate {
+  color: $grey;
+  }
 }

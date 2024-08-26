@@ -1,25 +1,28 @@
 (defvar panel_visible false)
 
 (defwindow panel
-  :monitor 1
+  :monitor 0
   :namespace "eww"
   :geometry (geometry
              :width "30%"
              :height "50%"
              :x "0%"
-             :y "10%")
-  (eventbox :onhoverlost "eww close panel"
-    (box :class "bg" :orientation "v"
+             :y "5%")
+  (eventbox :onhoverlost "eww close panel; eww update panel_open=false"
+    (box :class "bg" :orientation "v" :space-evenly false :spacing 5
+      (calendar :class "cal-box")
       (buttons)
       (controls)
       (player)
-      (box :class "bg"  :style "border: 1px solid #999999; padding: 10px;"
-      (label
-          :class "slogan"
-          :wrap true
-          :width 400
-          :text 
-      "\"Microsoft isn't evil, they just make really crappy operating systems.\"
-
-      - Linus Torvalds"))))
+      ))
 )
+;; (box :class "bg"  :style "border: 1px solid #999999; padding: 10px;"
+;; (label
+;;           :class "slogan"
+;;           :wrap true
+;;           :width 400
+;;           :text 
+;;       "\"Microsoft isn't evil, they just make really crappy operating systems.\"
+;;
+;;       - Linus Torvalds")
+;;       )

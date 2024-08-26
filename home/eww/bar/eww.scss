@@ -11,14 +11,23 @@ tooltip label {
 
 //Global Styles
 .bar {
-  background-color: rgba($black, 0.35);
+  background-color: rgba($black, 0.1);
   border-radius: 15px;
-  border: 0.5px solid $grey;
+  border: 0.5px solid $bg-alt;
   color: #b0b4bc;
-  padding: 5px;
 }
 
 // Styles on classes (see eww.yuck for more information)
+.modules_bar {
+  background-color: rgba($bg, 0.7);
+  border-radius: 7px;
+  border: 2px solid $grey;
+}
+
+.sidestuff {
+  @extend .modules_bar;
+  padding: 5px 0px 5px 10px;
+}
 
 .sidestuff slider {
   all: unset;
@@ -109,12 +118,15 @@ scale trough {
 }
 
 .time {
+  @extend .modules_bar;
   padding: 0px 10px 0px 10px;
   font-size: 15px;
   color: $white;
+  font-weight: bold;
 }
 
 .active_program {
+  @extend .modules_bar;
   font-size: 17px;
   padding: 0px 10px 0px 10px;
 }
@@ -130,7 +142,9 @@ scale trough {
 .workspaces {
   font-family: "JetBrains Mono";
   font-size: 17px;
-  padding-top: 0.5px;
+  margin-right: 5px;
+  padding: 6px 0px 5px 3px;
+  @extend .modules_bar;
 
   button {
     margin: 0px 3px;

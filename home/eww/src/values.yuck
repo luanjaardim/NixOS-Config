@@ -5,39 +5,30 @@
 (defpoll network_name :interval "10s"
   "./scripts/wifi.sh name")
 
-(defpoll music_info :interval "5s"
-  "./scripts/player.sh info")
+; this will update everything about the player at the same time
 (defpoll music_cur_time :interval "5s"
-  "./scripts/player.sh pos")
-(defpoll music_length :interval "5s"
-  "./scripts/player.sh len")
-(defpoll music_paused :interval "5s"
-  "./scripts/player.sh status")
+  "./scripts/music.sh")
+(defvar music_info "No music playing")
+(defvar music_length "0")
+(defvar music_paused "true")
 
-(defpoll time_hour :interval "5m"
-       "date +\"%I\"")
-(defpoll time_year :interval "12h"
-       "date +\"%y\"")
+; this will update each time related variable every 5 seconds
 (defpoll time_min :interval "5s"
-       "date +\"%M\"")
-(defpoll time_mer :interval "1h" ; PM or AM
-        "date +\"%p\"")
-(defpoll time_day :interval "30m"
-       "date +\"%d\"")
-(defpoll time_month :interval "48h"
-      "date +\%m")
-(defpoll time_day_name :interval "30m"
-       "date +\"%A\"")
-(defpoll time_month_name :interval "48h"
-      "date +\%B")
+       "./scripts/time.sh")
+(defvar time_hour "0")
+(defvar time_year "3000")
+(defvar time_mer "AM")
+(defvar time_day "1")
+(defvar time_month "11")
+(defvar time_day_name "Monday")
+(defvar time_month_name "November")
 
-(defpoll volume :interval "1s"
-  "amixer get Master | grep -oP '\\d+%' | head -n1 | tr -d '%'")
-(defvar set_volume_cmd "amixer -D pulse sset Master {}%")
 
-(defpoll microphone :interval "5s"
-  "amixer get Capture | grep -oP '\\d+%' | head -n1 | tr -d '%'")
-(defvar set_microphone_cmd "amixer -D pulse sset Capture {}%")
+(defpoll volume :interval "1s" "audio speaker get")
+(defvar set_volume_cmd "audio speaker set {}%")
+
+(defpoll microphone :interval "5s" "audio micro get")
+(defvar set_microphone_cmd "audio micro set {}%")
 
 (defpoll battery :interval "10s"
   "./scripts/batt.sh") ;; calls a script that returns the battery percentage, and notifies battery status with dunst

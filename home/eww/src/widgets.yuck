@@ -81,7 +81,7 @@
 ;;music player
 (defvar pctl "playerctl --player=spotify,%any")
 (defwidget player [ ?trans ]
-  (box :orientation "v" :spacing 7 :class "${ trans == "" ? "sub_bg" : ""}"
+  (box :orientation "v" :spacing 7 :class "${ trans == "" ? "panel-items" : ""}"
     (label :class "music_info" :text {music_info} :limit-width 400)
     (box :class "vol_bar"
       (scale
@@ -136,7 +136,7 @@
       :value battery :custom-text "t_bat" :custom-circ "p_bat")))
 
 (defwidget control [ icon value text-class scale-class onchange ]
-  (box :class "sub_bg" :orientation "h" :space-evenly false
+  (box :class "panel-items" :orientation "h" :space-evenly false
     ; text with the same length, so the bar doesn't move
     (label :text {
       value >= 10 ? "${icon}   ${value}%" : "${icon}   ${value}%  "
@@ -151,7 +151,7 @@
 ))))
 
 (defwidget controls []
-  (box :orientation "v" :spacing 10
+  (box :orientation "v"
     (control :icon "" :value volume :text-class "vol_control_label" :scale-class "vol_bar"
       :onchange set_volume_cmd)
     (control :icon "" :value microphone :text-class "mic_control_label" :scale-class "mic_bar"
@@ -175,23 +175,24 @@
         :class "bar"
         :orientation "h"
       (box :space-evenly false
-      (workspaces)
       (button
-        :class "time"
-        :onclick "eww ${cal_open ? "close" : "open" } cal; eww update cal_open=${!cal_open}"
+        :class "time" :style "margin-right: 5px"
+        ;; :onclick "eww ${cal_open ? "close" : "open" } cal; eww update cal_open=${!cal_open}"
+        :onclick "eww ${panel_open ? "close" : "open" } panel; eww update panel_open=${!panel_open}"
         "   ${time_hour}:${time_min} ${time_mer}, ${time_day_name} ${time_day}")
-      )
       (button
         :onclick "./scripts/rofi.sh"
         (label
         :class "active_program"
-        :limit-width 50
+        :limit-width 30
         :text "${program_name} : ${program_desc}"))
+      )
+      (workspaces)
       (sidestuff))))
 
 (defvar vol_show false)
 (defvar bri_show false)
-(defvar cal_open false)
+(defvar panel_open false)
 
 (defwidget sidestuff []
   (box :class "sidestuff" :orientation "h" :space-evenly false :halign "end"

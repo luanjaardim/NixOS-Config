@@ -1,34 +1,36 @@
 
 (defwindow bar
+  ; Xorg configs
+  :reserve (struts :side "top" :distance "4%")
   :windowtype "dock"
+  ; Wayland configs
   :monitor 0
   :exclusive true
   :namespace "eww"
   :geometry (geometry :x "0%"
-                      :y "0.4%"
+                      :y "5px"
                       ; Change the width percentage given the scale being used(hyrpland)
                       :width "150%"
                       :height "5%"
                       :anchor "top center")
-  :reserve (struts :side "top" :distance "4%")
   (bar))
 
-(defwindow cal
-  :windowtype "normal"
-  :monitor 0
-  :wm-ignore true
-  :geometry (geometry
-    :y "6%"
-    :width "10%"
-    :height "10%"
-    :anchor "top center")
-  :reserve (struts :side "top" :distance "5%")
-  (eventbox
-    :class "cal"
-    :onhoverlost "eww close cal; eww update cal_open=false"
-    (revealer
-      :reveal cal_open
-      :transition "fade"
-      :duration "550ms"
-    (calendar)))
-  )
+;; (defwindow cal
+;;   :windowtype "normal"
+;;   :monitor 0
+;;   :wm-ignore true
+;;   :namespace "eww"
+;;   :geometry (geometry
+;;     :y "6%"
+;;     :width "10%"
+;;     :height "10%"
+;;     :anchor "top center")
+;;   :reserve (struts :side "top" :distance "5%")
+;;   (eventbox
+;;     :onhoverlost "eww close cal; eww update cal_open=false"
+;;     (revealer
+;;       :reveal cal_open
+;;       :transition "fade"
+;;       :duration "550ms"
+;;     (calendar :class "cal-box")))
+;;   )
