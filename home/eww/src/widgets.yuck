@@ -151,7 +151,7 @@
 ))))
 
 (defwidget controls []
-  (box :orientation "v"
+  (box :orientation "v" :spacing 3
     (control :icon "" :value volume :text-class "vol_control_label" :scale-class "vol_bar"
       :onchange set_volume_cmd)
     (control :icon "" :value microphone :text-class "mic_control_label" :scale-class "mic_bar"
