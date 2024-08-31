@@ -1,4 +1,7 @@
+{pkgs, ...}: 
+
 {
+  programs.nixvim = {
     # Dependencies
     #
     # https://nix-community.github.io/nixvim/plugins/cmp-nvim-lsp.html
@@ -14,16 +17,10 @@
 
     # https://nix-community.github.io/nixvim/NeovimOptions/index.html?highlight=extraplugi#extraplugins
     extraPlugins = with pkgs.vimPlugins; [
-      # NOTE: This is how you would ad a vim plugin that is not implemented in Nixvim, also see extraConfigLuaPre below
-      # `neodev` configure Lua LSP for your Neovim config, runtime and plugins
-      # used for completion, annotations, and signatures of Neovim apis
-      neodev-nvim
+      # NOTE: This is where you would add a vim plugin that is not implemented in Nixvim, also see extraConfigLuaPre below
+      #
+      # TODO: Add luvit-meta when Nixos package is added
     ];
-
-    # https://nix-community.github.io/nixvim/NeovimOptions/index.html?highlight=extraplugi#extraconfigluapre
-    extraConfigLuaPre = ''
-      require('neodev').setup {}
-    '';
 
     # https://nix-community.github.io/nixvim/NeovimOptions/autoGroups/index.html
     autoGroups = {
@@ -71,16 +68,14 @@
       #  - settings: Override the default settings passed when initializing the server.
       #        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       servers = {
-        # clangd = {
-        #  enable = true;
-        #}
+        clangd.enable = true;
+        pyright.enable = true;
+        rust-analyzer = {
+         enable = true;
+         installCargo = true;
+         installRustc = true;
+        };
         # gopls = {
-        #  enable = true;
-        #}
-        # pyright = {
-        #  enable = true;
-        #}
-        # rust_analyzer = {
         #  enable = true;
         #}
         # ...etc. See `https://nix-community.github.io/nixvim/plugins/lsp` for a list of pre-configured LSPs
@@ -115,21 +110,6 @@
       keymaps = {
         # Diagnostic keymaps
         diagnostic = {
-          "[d" = {
-            #mode = "n";
-            action = "goto_prev";
-            desc = "Go to previous [D]iagnostic message";
-          };
-          "]d" = {
-            #mode = "n";
-            action = "goto_next";
-            desc = "Go to next [D]iagnostic message";
-          };
-          "<leader>e" = {
-            #mode = "n";
-            action = "open_float";
-            desc = "Show diagnostic [E]rror messages";
-          };
           "<leader>q" = {
             #mode = "n";
             action = "setloclist";
@@ -215,12 +195,6 @@
             action = "code_action";
             desc = "LSP: [C]ode [A]ction";
           };
-          # Opens a popup that displays documentation about the word under your cursor
-          #  See `:help K` for why this keymap.
-          "K" = {
-            action = "hover";
-            desc = "LSP: Hover Documentation";
-          };
           # WARN: This is not Goto Definition, this is Goto Declaration.
           #  For example, in C this would take you to the header.
           "gD" = {
@@ -259,7 +233,7 @@
         --    See `:help CursorHold` for information about when this is executed
         --
         -- When you move your cursor, the highlights will be cleared (the second autocommand).
-        if client and client.server_capabilities.documentHighlightProvider then
+        if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
           local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
           vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
             buffer = bufnr,
@@ -286,9 +260,9 @@
         -- code, if the language server you are using supports them
         --
         -- This may be unwanted, since they displace some of your code
-        if client and client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
+        if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
           map('<leader>th', function()
-            vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+            vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
           end, '[T]oggle Inlay [H]ints')
         end
       '';

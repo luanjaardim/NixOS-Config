@@ -1,7 +1,15 @@
 { config, pkgs, inputs, ... }:
 
 {
-  imports = [ inputs.nixvim.homeManagerModules.nixvim ];
+  imports = [
+    inputs.nixvim.homeManagerModules.nixvim 
+
+    ./modules/lsp.nix
+    ./modules/telescope.nix
+    ./modules/cmp.nix
+    ./modules/keymaps.nix
+
+  ];
 
   programs.nixvim = {
     enable = true;
@@ -127,9 +135,23 @@
       # "gc" to comment visual regions/lines
       # https://nix-community.github.io/nixvim/plugins/comment/index.html
       comment.enable = true;
+
+      cmp.enable = true;
       nvim-autopairs.enable = true;
       indent-blankline.enable = true;
       treesitter.enable = true;
+      gitsigns = {
+        enable = true;
+        settings = {
+          signs = {
+            add = {text = "+";};
+            change = {text = "~";};
+            delete = {text = "_";};
+            topdelete = {text = "‾";};
+            changedelete = {text = "~";};
+          };
+        };
+      };
       neogit.enable = true;
       # TODO: Add neo-tree: https://github.com/JMartJonesy/kickstart.nixvim/blob/main/plugins/kickstart/plugins/neo-tree.nix
       lint = {
@@ -147,6 +169,7 @@
         enable = true;
         signs = true;
       };
+
     };
 
     # https://nix-community.github.io/nixvim/NeovimOptions/index.html?highlight=extraplugins#extraplugins
