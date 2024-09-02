@@ -8,9 +8,10 @@ battery_status=`acpi -b | grep -oP 'Charging|Discharging'`
 path_to_icon=$HOME/.config/dunst/imgs/
 script_path=$HOME/.config/eww/scripts/
 
-if [ $battery_status == "Charging" ] && [ ! -f $script_path/.bat_tmp ]
+if [ $battery_status == "Charging" ] && [ "$(eww get isCharging)" == "false" ]
 then
-    cat /dev/null > $script_path/.bat_tmp
+    eww update isCharging=true
+    # notify-send -u normal "is charging? $(eww get isCharging)"
     dunstctl close-all
     notify-send -u normal "Batery is charging!" "Battery level is ${battery_level}%!" \
     -h string:frcolor:#33D17A \
@@ -31,9 +32,10 @@ then
     # change the frame color of the notification
     # change the icon of the notification
 
-elif [ $battery_status == "Discharging" ] && [ -f $script_path/.bat_tmp ]
+elif [ $battery_status == "Discharging" ] && [ "$(eww get isCharging)" == "true" ]
 then
-    rm $script_path/.bat_tmp
+    # notify-send -u normal "is discharging? $(eww get isCharging)"
+    eww update isCharging=false
     notify-send -u normal "Batery is discharging!" "Battery level is ${battery_level}%!" \
     -t 2000
 
