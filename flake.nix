@@ -31,7 +31,8 @@
   let
     inherit (self) outputs;
     lib = nixpkgs.lib;
-    settings = import ./utils/settings.nix;
+    pkgs = nixpkgs.legacyPackages.x86_64-linux;
+    settings = import ./utils/settings.nix { inherit pkgs; };
   in
   {
     # NixOS configuration entrypoint
@@ -51,7 +52,7 @@
     homeConfigurations = {
         "${settings.user}@${settings.hostname}" = home-manager.lib.homeManagerConfiguration {
 
-          pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
+          pkgs = pkgs; # Home-manager requires 'pkgs' instance
           extraSpecialArgs = {inherit inputs outputs settings;};
           modules = [ ./home ];
         };

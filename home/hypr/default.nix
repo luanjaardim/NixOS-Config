@@ -163,7 +163,7 @@
       monitor=HDMI-A-1,preferred,-1360x0,auto
 
       # Some default env vars.
-      env = XCURSOR_SIZE,24
+      env = XCURSOR_SIZE,${builtins.toString settings.cursor.size}
       env = QT_QPA_PLATFORMTHEME,qt5ct # change to qt6ct if you have that
       gestures {
           # See https://wiki.hyprland.org/Configuring/Variables/ for more

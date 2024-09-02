@@ -5,8 +5,24 @@ let
   user = settings.user;
 in
 {
-  home.username = "${user}";
-  home.homeDirectory = "/home/${user}";
+  home = {
+    username = "${user}";
+    homeDirectory = "/home/${user}";
+    pointerCursor = {
+      inherit (settings.cursor) package size name;
+      gtk.enable = true;
+      x11.enable = true;
+    };
+    sessionVariables = {
+      EDITOR = "nvim";
+      # For hyprland running Electron apps
+      NIXOS_OZONE_WL = "1";
+    };
+  };
+  gtk = {
+    enable = true;
+    cursorTheme = settings.cursor;
+  };
   nixpkgs.config.allowUnfree = true;
 
   imports = [
