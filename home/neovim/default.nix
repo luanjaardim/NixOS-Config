@@ -8,6 +8,7 @@
     ./modules/telescope.nix
     ./modules/cmp.nix
     ./modules/keymaps.nix
+    ./modules/mini.nix
 
   ];
 
@@ -175,7 +176,7 @@
     # https://nix-community.github.io/nixvim/NeovimOptions/index.html?highlight=extraplugins#extraplugins
     extraPlugins = with pkgs.vimPlugins; [
       # Useful for getting pretty icons, but requires a Nerd Font.
-      nvim-web-devicons # TODO: Figure out how to configure using this with telescope
+      nvim-web-devicons
     ];
 
     # TODO: Figure out where to move this
@@ -184,18 +185,103 @@
       if vim.g.have_nerd_font then
         require('nvim-web-devicons').setup {}
       end
+      vim.keymap.set("n", "<leader>/", function()
+        require('telescope.builtin').current_buffer_fuzzy_find(
+          require('telescope.themes').get_dropdown {
+            winblend = 10,
+            previewer = false
+          }
+        )
+      end, { desc="[/] Fuzzily search in current buffer" })
     '';
 
     # The line beneath this is called `modeline`. See `:help modeline`
     # https://nix-community.github.io/nixvim/NeovimOptions/index.html?highlight=extraplugins#extraconfigluapost
     extraConfigLuaPost = ''
-      -- vim: ts=2 sts=2 sw=2 et
+      -- netrw config
+      function ToggleNetRW()
+        if vim.bo.filetype == 'netrw' then
+          vim.api.nvim_command('Rex')
+          if vim.bo.filetype == 'netrw' then
+            vim.api.nvim_command('bdel')
+          end
+        else
+          vim.api.nvim_command('Ex')
+        end
+      end
+      vim.api.nvim_command('command! ToggleNetRW lua ToggleNetRW()')
+
+      vim.g.netrw_banner = 0
+      vim.g.netrw_liststyle = 0
+      vim.g.netrw_bufsettings = 'nonu nornu noma ro nobl'
+      vim.g.netrw_browse_split = 0 -- (4 to open in other window)
+      vim.g.netrw_altfile = 0 -- (4 to open in other window)
+      vim.g.netrw_list_hide = '^\\.\\.\\?/$,\\(^\\|\\s\\s\\)\\zs\\.\\S\\+'
+      vim.g.netrw_localcopydircmd = 'cp -r' -- enable recursive copy
+
+      vim.api.nvim_create_autocmd('filetype', {
+        pattern = 'netrw',
+        desc = 'Better mappings for netrw',
+        callback = function()
+          local bind = function(lhs, rhs)
+            vim.keymap.set('n', lhs, rhs, {remap = true, buffer = true})
+          end 
+
+          -- edit new file
+          bind('a', '%')
+
+          -- rename file
+          bind('r', 'R')
+
+          -- go up one directory
+          bind('h', '-')
+
+          -- enters the dir
+          bind('l', '<CR>')
+
+          -- toggles hidden files
+          bind('.', 'gh')
+        end
+      })
+
+      local te_buf = nil
+      local te_win_id = nil
+
+      local v = vim
+      local fun = v.fn
+      local cmd = v.api.nvim_command
+      local gotoid = fun.win_gotoid
+      local getid = fun.win_getid
+
+      local function openTerminal()
+              if fun.bufexists(te_buf) ~= 1 then
+                      cmd("au TermOpen * setlocal nonumber norelativenumber signcolumn=no")
+                      cmd("sp | winc J | res 10 | te")
+                      te_win_id = getid()
+                      te_buf = fun.bufnr('%')
+              elseif gotoid(te_win_id) ~= 1 then
+                      cmd("sb " .. te_buf .. "| winc J | res 10")
+                      te_win_id = getid()
+              end
+              cmd("startinsert")
+      end
+
+      local function hideTerminal()
+              if gotoid(te_win_id) == 1 then
+                      cmd("hide")
+              end
+      end
+
+      function ToggleTerminal()
+              if gotoid(te_win_id) == 1 then
+                      hideTerminal()
+              else
+                      openTerminal()
+              end
+      end
+
+      vim.keymap.set({ "t", "n" }, "<M-t>", ToggleTerminal)
     '';
 
   };
-    #  programs.neovim.defaultEditor = true;
-    #  home.file."./.config/nvim" = {
-    #    source = ./nvim;
-    #    recursive = true;
-    #  };
 }
