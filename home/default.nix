@@ -14,6 +14,7 @@ in
     ./dunst
     ./neovim
     ./starship
+    ./yazi
     ./firefox
   ] ++
   (if settings.wm == "bspwm" then
@@ -32,6 +33,10 @@ in
     # For hyprland running Electron apps
     NIXOS_OZONE_WL = "1";
   };
+  services.mpris-proxy.enable = true;
+
+  # Enable copy from pdf to clipoard in zathura
+  xdg.configFile."zathura/zathurarc".text = "set selection-clipboard clipboard";
 
   services.picom = {
     package = pkgs.picom-next;
@@ -63,7 +68,7 @@ in
     eza # A modern replacement for ‘ls’
     fzf # A command-line fuzzy finder
     brightnessctl # brightness controller
-    alsa-utils # audio control
+    pulseaudio # audio control
     acpi # battery control
     playerctl # music player
 
@@ -110,23 +115,15 @@ in
     # Utility programs
     dmenu     # Simpler App launcher
     dunst     # Notification app
-    yazi      # Terminal file manager
+    zathura   # pdf viewer
+    bluetuith # tui for blueooth management
 
     # Other programs
     anydesk
     spotify
     discord
-
-    # Hyprland programs
-    hyprpaper
-    wl-clipboard
-    wayland-utils
-    wayland-protocols
-    wlroots
-    meson
-    grim
-    slurp
-
+    vlc
+    obs-studio
   ];
 
   programs = {
@@ -167,6 +164,7 @@ in
       };
       shellIntegration.enableFishIntegration = true;
       theme = "Tokyo Night Moon";
+      extraConfig = "confirm_os_window_close 0";
     };
     # alacritty - a cross-platform, GPU-accelerated terminal emulator
     alacritty = {

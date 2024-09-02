@@ -27,7 +27,7 @@
     settings = {
         exec-once = [
             "hyprpaper &"
-            "eww daemon; eww open bar; eww open workspace"
+            "eww daemon && eww open bar && eww open workspace"
             #"set wallpaper here..."
         ];
 
