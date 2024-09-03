@@ -141,6 +141,7 @@
       nvim-autopairs.enable = true;
       indent-blankline.enable = true;
       treesitter.enable = true;
+      nvim-ufo.enable = true;
       gitsigns = {
         enable = true;
         settings = {
@@ -182,6 +183,9 @@
     # TODO: Figure out where to move this
     # https://nix-community.github.io/nixvim/NeovimOptions/index.html?highlight=extraplugins#extraconfigluapre
     extraConfigLuaPre = ''
+      vim.opt.foldlevelstart = 99;
+      vim.wo.foldlevel = 99;
+
       if vim.g.have_nerd_font then
         require('nvim-web-devicons').setup {}
       end
