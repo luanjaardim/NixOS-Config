@@ -3,6 +3,15 @@
 let
   lib = pkgs.lib;
   user = settings.user;
+  aliases = {
+    l = "ls -la";
+    c = "cd ..";
+    nv = "nvim";
+    y = "yazi .";
+    gits = "git status";
+    gitl = "git log --oneline --graph --all";
+    gitc = "git commit -m";
+  };
 in
 {
   home = {
@@ -158,17 +167,20 @@ in
       enable = true;
     };
 
+    carapace.enable = true;
+    nushell = {
+      enable = true;
+      shellAliases = aliases;
+      configFile.text = ''
+        $env.config = {
+          # remove the welcome message
+          show_banner : false,
+        }
+      '';
+    };
     fish = {
       enable = true;
-      shellAbbrs = {
-        l = "ls -la";
-	c = "cd ..";
-        nv = "nvim";
-        y = "yazi .";
-	gits = "git status";
-	gitl = "git log --oneline --graph --all";
-	gitc = "git commit -m";
-      };
+      shellAbbrs = aliases;
       shellInit = "set fish_greeting";
     };
 
@@ -180,7 +192,10 @@ in
       };
       shellIntegration.enableFishIntegration = true;
       theme = "Tokyo Night Moon";
-      extraConfig = "confirm_os_window_close 0";
+      extraConfig = ''
+        confirm_os_window_close 0
+        map ctrl+shift+q no_op
+      '';
     };
     # alacritty - a cross-platform, GPU-accelerated terminal emulator
     alacritty = {
@@ -199,7 +214,6 @@ in
         selection.save_to_clipboard = true;
       };
     };
-
   };
 
   # This value determines the home Manager release that your

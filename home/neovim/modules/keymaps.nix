@@ -3,15 +3,25 @@
 {
   programs.nixvim = {
     keymaps = [
+      { # Esc to disable highlight after string search
+        mode = "n";
+        key = "<Esc>";
+        action = "<cmd>nohlsearch<CR>";
+      }
       { # Ctrl + s to save
         mode = "n";
         key = "<C-s>";
         action = "<cmd>w<CR>";
       }
-      { # Ctrl + q to quit
+      { # Ctrl + q to quit a tab
         mode = "n";
         key = "<C-q>";
         action = "<cmd>q<CR>";
+      }
+      { # Ctrl + Q to quit all
+        mode = "n";
+        key = "<C-S-q>";
+        action = "<cmd>qa<CR>";
       }
       { # Ctrl + j move to the window below
         mode = "n";

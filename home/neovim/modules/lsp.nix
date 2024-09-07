@@ -70,6 +70,7 @@
       servers = {
         clangd.enable = true;
         pyright.enable = true;
+        nixd.enable = true; # Server for Nix lang
         rust-analyzer = {
          enable = true;
          installCargo = true;

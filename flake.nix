@@ -30,9 +30,9 @@
   outputs = { self, nixpkgs, home-manager, ... }@inputs:
   let
     inherit (self) outputs;
-    lib = nixpkgs.lib;
-    pkgs = nixpkgs.legacyPackages.x86_64-linux;
     settings = import ./utils/settings.nix { inherit pkgs; };
+    lib = nixpkgs.lib;
+    pkgs = nixpkgs.legacyPackages.${settings.system};
   in
   {
     # NixOS configuration entrypoint
