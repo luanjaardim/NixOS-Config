@@ -183,6 +183,11 @@
         ];
 
         lspBuf = {
+          # Show documentation to the word under the cursor
+          "K" = {
+            action = "hover";
+            desc = "LSP: Show Documentation";
+          };
           # Rename the variable under your cursor.
           #  Most Language Servers support renaming across files, etc.
           "<leader>rn" = {

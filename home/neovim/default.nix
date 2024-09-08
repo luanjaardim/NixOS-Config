@@ -137,7 +137,6 @@
       # https://nix-community.github.io/nixvim/plugins/comment/index.html
       comment.enable = true;
 
-      cmp.enable = true;
       nvim-autopairs.enable = true;
       indent-blankline.enable = true;
       treesitter.enable = true;
