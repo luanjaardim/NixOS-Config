@@ -164,12 +164,8 @@ in
     # basic configuration of git
     git = {
       enable = true;
-      userName = "luanjaardim";
-      userEmail = "luang.ajardim@gmail.com";
-    };
-    # Starship - an customizable prompt for any shell
-    starship = {
-      enable = true;
+      userName = settings.gitUserName;
+      userEmail = settings.gitUserEmail;
     };
 
     carapace.enable = true;

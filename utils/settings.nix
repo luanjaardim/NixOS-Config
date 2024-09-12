@@ -1,7 +1,10 @@
 { pkgs, ... }:
 
-{
-  user = "jaardim";
+rec {
+  # TODO: update info below.
+  user = "user";
+  gitUserName = "";
+  gitUserEmail = "";
   hostname = "nixos";
   system = "x86_64-linux";
   wm = "hypr";         # bspwm or hypr
