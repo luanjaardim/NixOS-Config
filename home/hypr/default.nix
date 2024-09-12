@@ -139,9 +139,9 @@
 
             #Screenshot
             ''
-            $mod, Print, exec, grim -g "$(slurp -d)" "$HOME/pictures/screenshots/$(date '+%y%m%d_%H-%M-%S').png"
+            $mod, Print, exec, grim -g "$(slurp)" "$HOME/pictures/screenshots/$(date '+%y%m%d_%H-%M-%S').png"
             ''
-            '', Print, exec, grim -g "$(slurp -d)" - | wl-copy''
+            '', Print, exec, grim -g "$(slurp)" - | wl-copy''
         ];
 
         # Bindings for mouse
