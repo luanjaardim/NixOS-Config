@@ -1,4 +1,4 @@
-{ ... }:
+{ settings, ... }:
 
 {
     services.hyprpaper = {
@@ -6,12 +6,11 @@
         settings = {
             splash = false;
 
-            preload =
-              [ "/home/jaardim/pictures/wallpaper.png" ];
+            preload = [ settings.image ];
 
             wallpaper = [
-              "eDP-1,/home/jaardim/pictures/wallpaper.png"
-              "HDMI-A-1,/home/jaardim/pictures/wallpaper.png"
+              "eDP-1,${settings.image}"
+              "HDMI-A-1,${settings.image}"
             ];
         };
     };

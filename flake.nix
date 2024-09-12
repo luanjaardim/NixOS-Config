@@ -17,6 +17,9 @@
       inputs.nixpkgs.follows = "nixpkgs"; 
     };
 
+    # Stylix
+    stylix.url = "github:danth/stylix";
+
     # Neovim manager
     nixvim = {
       # url = "github:nix-community/nixvim";
@@ -30,9 +33,9 @@
   outputs = { self, nixpkgs, home-manager, ... }@inputs:
   let
     inherit (self) outputs;
-    settings = import ./utils/settings.nix { inherit pkgs; };
-    lib = nixpkgs.lib;
     pkgs = nixpkgs.legacyPackages.${settings.system};
+    lib = nixpkgs.lib;
+    settings = import ./utils/settings.nix { inherit pkgs lib; };
   in
   {
     # NixOS configuration entrypoint
@@ -54,7 +57,7 @@
 
           pkgs = pkgs; # Home-manager requires 'pkgs' instance
           extraSpecialArgs = {inherit inputs outputs settings;};
-          modules = [ ./home ];
+          modules = [ inputs.stylix.homeManagerModules.stylix ./home ];
         };
     };
 

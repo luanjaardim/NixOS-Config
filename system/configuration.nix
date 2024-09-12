@@ -73,15 +73,19 @@ in
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users."${user}" = with pkgs; {
     isNormalUser = true;
-    extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "wheel" "networkmanager" ]; # Adding user to groups
     initialPassword = "nixos"; # TODO: change this.
-    shell = fish;
+    shell = settings.shell;
   };
 
   # List packages installed in system profile. For every user.
   environment.systemPackages = with pkgs; [
+    # Shells
     bash
     fish
+    nushell
+
+    # Standard apps
     firefox
     tree
     feh
@@ -96,11 +100,6 @@ in
 
     # clipboard
     xclip
-  ];
-
-  fonts.packages = with pkgs; [
-    jetbrains-mono
-    (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
   ];
 
   nixpkgs.config.allowUnfree = true;

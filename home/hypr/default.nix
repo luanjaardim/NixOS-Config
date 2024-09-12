@@ -27,8 +27,7 @@
     settings = {
         exec-once = [
             "hyprpaper &"
-            "eww daemon && eww open bar && eww open workspace"
-            #"set wallpaper here..."
+            "eww daemon ; eww open bar ; sleep 1sec ; eww open workspace"
         ];
 
         general = {
@@ -43,8 +42,6 @@
             resize_on_border = true;
             layout = "master";
             no_border_on_floating = true;
-            "col.active_border" = "rgba(33ccffee) rgba(00ff99ee) 45deg";
-            "col.inactive_border" = "rgba(595959aa)";
         };
 
         input = {
@@ -74,7 +71,6 @@
             shadow_offset = "0 2";
             shadow_range = 20;
             shadow_render_power = 3;
-            "col.shadow" = "rgba(00000055)";
         };
 
         animations = {

@@ -17,67 +17,72 @@ in
   home = {
     username = "${user}";
     homeDirectory = "/home/${user}";
-    pointerCursor = {
-      inherit (settings.cursor) package size name;
-      gtk.enable = true;
-      x11.enable = true;
-    };
     sessionVariables = {
       EDITOR = "nvim";
       # For hyprland running Electron apps
       NIXOS_OZONE_WL = "1";
     };
   };
-  gtk = {
-    enable = true;
-    cursorTheme = settings.cursor;
-  };
+
   nixpkgs.config.allowUnfree = true;
 
   imports = [
+    ./stylix
     ./rofi
     ./dunst
     ./neovim
     ./starship
     ./yazi
     ./firefox
-  ] ++
-  (if settings.wm == "bspwm" then
-    [ ./bspwm ./sxhkd ]
-  else
-    [ ./hypr ]);
+    ./bspwm
+    ./sxhkd
+    ./hypr
+    ./ags
+    ./../scripts
+  ];
+  # imports = [
+  #   ./rofi
+  #   ./dunst
+  #   ./neovim
+  #   ./starship
+  #   ./firefox
+  # ] ++
+  # (if settings.wm == "bspwm" then
+  #   [ ./bspwm ./sxhkd ]
+  # else
+  #   [ ./hypr ]);
 
-  # set cursor size and dpi for 4k monitor
-  xresources.properties = {
-    "Xcursor.size" = 16;
-    "Xft.dpi" = 172;
-  };
-
-  home.sessionVariables = {
-    EDITOR = "nvim";
-    # For hyprland running Electron apps
-    NIXOS_OZONE_WL = "1";
-  };
+  # Bluetooth buttons
   services.mpris-proxy.enable = true;
 
   # Enable copy from pdf to clipoard in zathura
   xdg.configFile."zathura/zathurarc".text = "set selection-clipboard clipboard";
 
-  services.picom = {
-    package = pkgs.picom-next;
-    enable = true;
-    activeOpacity = 0.95;
-    inactiveOpacity = 0.85;
-    settings = {
-      animations = true;
-      corner-radius = 10;
-      blur = {
-        method = "dual-kawase";
-	size = 9;
-	background = true;
+  xdg.mimeApps = {
+      enable = true;
+      defaultApplications = {
+        "text/plain" = "nvim.desktop";
+        "application/pdf" = "zathura.desktop";
+        "application/png" = "feh.desktop";
+        "application/jpeg" = "feh.desktop";
       };
     };
-  };
+
+ #  services.picom = {
+ #    package = pkgs.picom-next;
+ #    enable = true;
+ #    activeOpacity = 0.95;
+ #    inactiveOpacity = 0.85;
+ #    settings = {
+ #      animations = true;
+ #      corner-radius = 10;
+ #      blur = {
+ #        method = "dual-kawase";
+	# size = 9;
+	# background = true;
+ #      };
+ #    };
+ #  };
 
   # Packages that should be installed to the user profile.
   home.packages = with pkgs; [
@@ -186,33 +191,11 @@ in
 
     kitty = {
       enable = true;
-      font = {
-          name = "JetBrainsMono";
-          size = 11;
-      };
       shellIntegration.enableFishIntegration = true;
-      theme = "Tokyo Night Moon";
       extraConfig = ''
         confirm_os_window_close 0
         map ctrl+shift+q no_op
       '';
-    };
-    # alacritty - a cross-platform, GPU-accelerated terminal emulator
-    alacritty = {
-      enable = true;
-      # custom settings
-      settings = {
-        env.TERM = "xterm-256color";
-        font = {
-	  normal = {
-	    family = "JetBrainsMono";
-	    style = "Regular";
-	  };
-          size = 12;
-        };
-        scrolling.multiplier = 5;
-        selection.save_to_clipboard = true;
-      };
     };
   };
 

@@ -11,8 +11,8 @@ configuration {
 
 window {
     transparency:                   "real";
-    font: "JetBrainsMono Nerd Font 12";
-	  width:  36%;
+    font: @font;
+    width:  36%;
 }
 
 entry {
@@ -31,7 +31,7 @@ entry {
 }
 
 inputbar {
-	  children:                       [ entry ];
+    children:                       [ entry ];
     background-color:               @background;
     text-color:                     @background;
     expand:                         false;
