@@ -7,6 +7,7 @@ let
     l = "ls -la";
     c = "cd ..";
     nv = "nvim";
+    dev = "nix develop";
     y = "yazi .";
     gits = "git status";
     gitl = "git log --oneline --graph --all";

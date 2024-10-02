@@ -5,6 +5,7 @@ rec {
   user = "user";
   gitUserName = "";
   gitUserEmail = "";
+  is_vm = false;
   hostname = "nixos";
   system = "x86_64-linux";
   wm = "hypr";         # bspwm or hypr
@@ -17,8 +18,10 @@ rec {
   };
   font = "FiraCode";
   theme = "catppuccin-mocha";
-  wallpaper = ./../home/wallpaper.jpg;
-  image = pkgs.runCommand "dimmed-background.png" { } ''
-      ${pkgs.imagemagick}/bin/convert "${wallpaper}" -brightness-contrast -30,0 -fill "black" $out
-  '';
+  wallpaper = ../wallpaper.png;
+  image = pkgs.runCommand "wallpaper.png" { } "cp ${wallpaper} $out";
+  # Running imagemagick command on the wallpaper
+  # image = pkgs.runCommand "dimmed-background.png" { } ''
+  #     ${pkgs.imagemagick}/bin/convert "${wallpaper}" -brightness-contrast -30,0 -fill "black" $out
+  # '';
 }

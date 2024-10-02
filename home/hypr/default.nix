@@ -55,6 +55,10 @@
             };
         };
 
+        cursor = {
+            no_warps = true;
+        };
+
         decoration = {
             rounding = 5;
             blur = {
@@ -62,8 +66,8 @@
                 size = 7;
                 passes = 1;
             };
-            active_opacity = 0.97;
-            inactive_opacity = 0.90;
+            active_opacity = 0.92;
+            inactive_opacity = 0.87;
 
             drop_shadow = true;
 

@@ -7,16 +7,17 @@ in
 {
   imports =
     [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
+      ./hardware-configuration.nix # TODO: Copy your hardware-configuration.nix to this directory
     ];
 
-  # Use the GRUB 2 boot loader.
-  boot.loader.grub.enable = true;
-  # boot.loader.grub.efiSupport = true;
-  # boot.loader.grub.efiInstallAsRemovable = true;
-  # boot.loader.efi.efiSysMountPoint = "/boot/efi";
-  # Define on which hard drive you want to install Grub.
-  boot.loader.grub.device = "/dev/sda"; # or "nodev" for efi only
+  boot.loader = (if settings.is_vm then {
+    grub.enable = true;
+    grub.device = "/dev/sda"; # or "nodev" for efi only
+  } else {
+    systemd-boot.enable = true;
+    efi.canTouchEfiVariables = true;
+  });
+  virtualisation.virtualbox = if settings.is_vm then { guest.enable = true; } else { host.enable = true; };
 
   networking.hostName = "${hostname}"; # Define your hostname.
   # Pick only one of the below networking options.
@@ -38,17 +39,19 @@ in
   #   useXkbConfig = true; # use xkb.options in tty.
   # };
 
-  virtualisation.virtualbox.guest.enable = true; 
-
   # Enable the X11 windowing system.
   services.xserver = {
     enable = true;
-    videoDrivers = [ "intel" ];
+    videoDrivers = [ "intel" ]; # TODO: enable nvidia driver
     windowManager.bspwm.enable = true;
-    #displayManager.lightdm = {
-    #  greeters.slick.enable = true;
-    #};
+    displayManager.lightdm = {
+      enable = true;
+      greeters.gtk.enable = true;
+    };
   };
+  programs.hyprland.enable = true;
+
+  services.upower.enable = true;
 
   # Configure keymap in X11
   # services.xserver.xkb.layout = "us";
@@ -63,6 +66,20 @@ in
   services.pipewire = {
     enable = true;
     pulse.enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    jack.enable = true;
+  };
+
+  hardware.bluetooth.enable = true; # enables support for Bluetooth
+  hardware.bluetooth.powerOnBoot = true; # powers up the default Bluetooth controller on boot
+
+  # Bluetooth actions with headphone
+  systemd.user.services.mpris-proxy = {
+      description = "Mpris proxy";
+      after = [ "network.target" "sound.target" ];
+      wantedBy = [ "default.target" ];
+      serviceConfig.ExecStart = "${pkgs.bluez}/bin/mpris-proxy";
   };
 
   # Enable touchpad support (enabled default in most desktopManager).
@@ -70,12 +87,15 @@ in
 
   programs.fish.enable = true;
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users."${user}" = with pkgs; {
-    isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" ]; # Adding user to groups
-    initialPassword = "nixos"; # TODO: change this.
-    shell = settings.shell;
+  users = {
+    extraGroups.vboxusers.members = [ user ];
+    # Define a user account. Don't forget to set a password with ‘passwd’.
+    users."${user}" = {
+      isNormalUser = true;
+      extraGroups = [ "wheel" "networkmanager" ]; # Adding user to groups
+      initialPassword = "nixos"; # TODO: change this.
+      shell = settings.shell;
+    };
   };
 
   # List packages installed in system profile. For every user.
@@ -93,6 +113,10 @@ in
     neovim
     wget
     git
+    tldr
+    comma # install and test packages easily with comma: ', cowsay'
+    # Command to install the nix-index DB, TODO: make this declarative to know worry in running this
+    # mkdir -p "$HOME/.cache/nix-index" && wget https://github.com/Mic92/nix-index-database/releases/latest/download/index-x86_64-linux -O "$HOME/.cache/nix-index/files"
 
     # notification lib packages
     libnotify
