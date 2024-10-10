@@ -145,7 +145,6 @@ in
 
     # Utility programs
     dmenu     # Simpler App launcher
-    dunst     # Notification app
     zathura   # pdf viewer
     bluetuith # tui for blueooth management
 

@@ -20,6 +20,9 @@
     # Stylix
     stylix.url = "github:danth/stylix";
 
+    # Widgets with Ags
+    ags.url = "github:Aylur/ags";
+
     # Neovim manager
     nixvim = {
       # url = "github:nix-community/nixvim";

@@ -133,6 +133,7 @@
       indent-blankline.enable = true;
       treesitter.enable = true;
       nvim-ufo.enable = true;
+      nvim-colorizer.enable = true;
       gitsigns = {
         enable = true;
         settings = {

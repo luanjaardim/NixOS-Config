@@ -1,0 +1,86 @@
+/* 
+ * @theme_selected_fg_color
+ * @theme_fg_color
+ * @theme_selected_bg_color
+ * @theme_bg_color
+ * @theme_base_color
+ */
+$bg: #1e1e2e;
+$bg_alt: #181825;
+$bg_sel: #313244;
+$comments: #45475a;
+$fg_alt: #585b70;
+$fg: #cdd6f4;
+$c0: #f5e0dc;
+$c1: #b4befe;
+$c2: #f38ba8;
+$c3: #fab387;
+$c4: #1e1e2e;
+$c5: #1e1e2e;
+$c5: #f38ba8;
+$c7: #fab387;
+$c8: #a6e3a1;
+$c9: #94e2d5;
+
+window.bar {
+    background-color: $bg_alt;
+    color: $fg;
+}
+
+button {
+    min-width: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    background-color: transparent;
+}
+
+slider {
+  all: unset;
+}
+
+scale trough {
+  all: unset;
+  background-color: $bg;
+  border-radius: 5px;
+  min-height: 10px;
+  min-width: 80px;
+  margin: 0 .8rem 0 0;
+}
+
+trough highlight {
+  background-color: $c2;
+  border-radius: 5px;
+}
+
+button:active {
+    background-color: $bg_sel;
+}
+
+button:hover {
+    border-bottom: 3px solid $fg_alt;
+}
+
+label {
+    font-weight: bold;
+}
+
+.workspaces button.focused {
+    border-bottom: 3px solid $bg_sel;
+}
+
+.client-title {
+    color: $bg_sel;
+}
+
+.clock {
+    color: $c2;
+}
+
+.notification {
+    color: $c1;
+}
+
+levelbar block,
+highlight {
+    min-height: 10px;
+}

@@ -5,6 +5,12 @@
   # add the home manager module
   imports = [ inputs.ags.homeManagerModules.default ];
 
+  xdg.configFile."ags/config.js".source = config.lib.file.mkOutOfStoreSymlink ~/.dots/home/ags/config.js;
+  xdg.configFile."ags/style.scss".source = config.lib.file.mkOutOfStoreSymlink ~/.dots/home/ags/style.scss;
+
+  # Package to compile scss into css
+  home.packages = [ pkgs.sass ];
+
   programs.ags = {
     enable = true;
 

@@ -1,6 +1,8 @@
 { config, pkgs, settings, ... }:
 
 {
+  home.packages = [ pkgs.dunst ];
+
   home.file = {
     "./.config/dunst/imgs" = {
       source = ./imgs;
