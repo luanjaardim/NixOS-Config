@@ -23,7 +23,7 @@ $c8: #a6e3a1;
 $c9: #94e2d5;
 
 window.bar {
-    background-color: $bg_alt;
+    background-color: transparent;
     color: $fg;
 }
 
@@ -64,17 +64,31 @@ label {
     font-weight: bold;
 }
 
-.workspaces button.focused {
-    border-bottom: 3px solid $bg_sel;
+// Modules general css
+.workspaces,
+.client-title,
+.media,
+.clock,
+.systray {
+    margin: 5px 5px 0px 5px;
+    padding: 0px 5px 0px 5px;
+    border-radius: 5px;
+    background-color: $bg;
 }
-
+.workspaces {
+    border-bottom: 2px solid $c0;
+}
 .client-title {
-    color: $bg_sel;
+    color: $c9;
+    border-bottom: 2px solid $c2;
+}
+.media {
+    border-bottom: 2px solid $c8;
+}
+.clock {
+    border-bottom: 2px solid $c1;
 }
 
-.clock {
-    color: $c2;
-}
 
 .notification {
     color: $c1;

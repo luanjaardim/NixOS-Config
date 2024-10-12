@@ -21,7 +21,7 @@ const Workspaces = () => {
 	onScrollUp: () => dispatch('+1'),
 	onScrollDown: () => dispatch('-1'),
 	child: Widget.Box({
-
+            class_name: "workspaces",
 	    children: [...Array(5)].map((_, i) => {
 		const id = i + 1;
 		return Widget.Button({
@@ -37,9 +37,10 @@ const Workspaces = () => {
 
 
 function ClientTitle() {
+    const c = hyprland.active.client.bind("class")
     return Widget.Label({
-        class_name: "client-title",
-        label: hyprland.active.client.bind("class").as( s => s[0].toUpperCase() + s.slice(1)),
+        class_name: c.as(s => s.length == 0 ? "" : "client-title"),
+        label: c.as( s => s.length != 0 ? s[0].toUpperCase() + s.slice(1) : ""),
     })
 }
 
@@ -75,16 +76,22 @@ function Media() {
     const label = Utils.watch("", mpris, "player-changed", () => {
         if (mpris.players[0]) {
             const { track_artists, track_title } = mpris.players[0]
-            return `${track_artists.join(", ")} - ${track_title}`
+            const music = `${track_artists.join(", ")} - ${track_title}`
+            const maxLen = 50;
+            return music.length > maxLen ? `${music.slice(0, maxLen-3)}...` : music
         } else {
             return "Nothing is playing"
         }
     })
 
     return Widget.Button({
-        class_name: "media",
-        on_primary_click: () => mpris.getPlayer("")?.playPause(),
+        class_name: label.as( s => s.length == 0 ? "" : "media"),
+        onPrimaryClick: () => mpris.getPlayer("")?.playPause(),
+        // Go to next song
+        onSecondaryClick: () => mpris.getPlayer("")?.next(),
         onScrollUp: () => mpris.getPlayer("")?.next(),
+        // Go to previous song
+        onMiddleClick: () => mpris.getPlayer("")?.previous(),
         onScrollDown: () => mpris.getPlayer("")?.previous(),
         child: Widget.Label({ label }),
     })
@@ -197,6 +204,7 @@ function BatteryLabel() {
 function SysTray() {
     const items = systemtray.bind("items")
         .as(items => items.map(item => Widget.Button({
+            class_name: "systray",
             child: Widget.Icon({ icon: item.bind("icon") }),
             on_primary_click: (_, event) => item.activate(event),
             on_secondary_click: (_, event) => item.openMenu(event),
@@ -212,7 +220,6 @@ function SysTray() {
 // layout of the bar
 function Left() {
     return Widget.Box({
-        spacing: 8,
         children: [
             Workspaces(),
             ClientTitle(),
@@ -233,13 +240,13 @@ function Center() {
 function Right() {
     return Widget.Box({
         hpack: "end",
-        spacing: 8,
+        spacing: 10,
         children: [
+            SysTray(),
             Brightness(),
             Volume(),
             BatteryLabel(),
             Clock(),
-            SysTray(),
         ],
     })
 }
