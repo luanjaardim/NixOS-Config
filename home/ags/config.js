@@ -4,9 +4,26 @@ const mpris = await Service.import("mpris")
 const audio = await Service.import("audio")
 const battery = await Service.import("battery")
 const systemtray = await Service.import("systemtray")
+import { applauncher } from "./applauncher.js"
 
 const date = Variable("", {
     poll: [5000, 'date "+%H:%M %e %b"'],
+})
+
+const divide = ([total, free]) => free / total
+
+const cpu = Variable(0, {
+    poll: [2000, 'top -b -n 1', out => divide([100, out.split('\n')
+        .find(line => line.includes('Cpu(s)'))
+        .split(/\s+/)[1]
+        .replace(',', '.')])],
+})
+
+const ram = Variable(0, {
+    poll: [2000, 'free', out => divide(out.split('\n')
+        .find(line => line.includes('Mem:'))
+        .split(/\s+/)
+        .splice(1, 2))],
 })
 
 // widgets can be only assigned as a child in one container
@@ -125,6 +142,19 @@ export function custom_revealer(trigger, slider, custom_class = '', on_primary_c
     return eventBox;
 }
 
+function InfoProgress(icon, value) {
+    return Widget.Box({
+        children: [
+            icon,
+            Widget.CircularProgress({
+                class_name: "info_progress",
+                value,
+            })
+        ],
+    })
+
+}
+
 function Volume() {
     const icons = {
         101: "overamplified",
@@ -191,12 +221,18 @@ function BatteryLabel() {
         visible: battery.bind("available"),
         children: [
             Widget.Icon({ icon }),
-            Widget.LevelBar({
-                widthRequest: 140,
-                vpack: "center",
+            Widget.CircularProgress({
+                class_name: "info_progress",
                 value,
             }),
         ],
+        setup: self => self.hook(battery, self => {
+            if(Number(battery.percent) < 20 && !battery.charging) {
+                Utils.execAsync(`notify-send "Battery Low"`)
+            } else if(Number(battery.percent) == 100) {
+                Utils.execAsync(`notify-send "Battery Full"`)
+            }
+        }, "changed"),
     })
 }
 
@@ -242,10 +278,18 @@ function Right() {
         hpack: "end",
         spacing: 10,
         children: [
-            SysTray(),
-            Brightness(),
-            Volume(),
-            BatteryLabel(),
+            Widget.Box({
+                class_name: "utils",
+                spacing: 10,
+                children: [
+                    SysTray(),
+                    Brightness(),
+                    Volume(),
+                    InfoProgress(Widget.Label({label: "CPU"}), cpu.bind()),
+                    InfoProgress(Widget.Label({label: "RAM"}), ram.bind()),
+                    BatteryLabel(),
+                ]
+            }),
             Clock(),
         ],
     })
@@ -275,6 +319,7 @@ App.config({
     style: css,
     windows: [
         Bar(),
+        applauncher,
 
         // you can call it, for each monitor
         // Bar(0),

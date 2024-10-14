@@ -40,7 +40,7 @@ slider {
 
 scale trough {
   all: unset;
-  background-color: $bg;
+  background-color: $bg_sel;
   border-radius: 5px;
   min-height: 10px;
   min-width: 80px;
@@ -61,6 +61,7 @@ button:hover {
 }
 
 label {
+    color: $fg;
     font-weight: bold;
 }
 
@@ -69,7 +70,7 @@ label {
 .client-title,
 .media,
 .clock,
-.systray {
+.utils {
     margin: 5px 5px 0px 5px;
     padding: 0px 5px 0px 5px;
     border-radius: 5px;
@@ -79,7 +80,6 @@ label {
     border-bottom: 2px solid $c0;
 }
 .client-title {
-    color: $c9;
     border-bottom: 2px solid $c2;
 }
 .media {
@@ -88,7 +88,33 @@ label {
 .clock {
     border-bottom: 2px solid $c1;
 }
+.utils {
+    border-bottom: 2px solid $c3;
+}
 
+.info_progress {
+    margin: 20px;
+    font-size: 6px;
+}
+
+.applauncher {
+    border: 2px solid $c2;
+    border-radius: 10px;
+    background-color: $bg_alt;
+    button {
+        all: unset;
+    }
+    button:hover, button:focus {
+        background-color: $bg_sel;
+        border-radius: 10px;
+    }
+    .scroll {
+        background-color: $bg;
+    }
+    .entry {
+        border: 2px solid $c1;
+    }
+}
 
 .notification {
     color: $c1;
