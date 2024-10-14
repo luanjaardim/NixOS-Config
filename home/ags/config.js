@@ -5,6 +5,7 @@ const audio = await Service.import("audio")
 const battery = await Service.import("battery")
 const systemtray = await Service.import("systemtray")
 import { applauncher } from "./applauncher.js"
+import { NotificationPopups } from "./notifications.js"
 
 const date = Variable("", {
     poll: [5000, 'date "+%H:%M %e %b"'],
@@ -68,26 +69,6 @@ function Clock() {
         label: date.bind(),
     })
 }
-
-
-// we don't need dunst or any other notification daemon
-// because the Notifications module is a notification daemon itself
-function Notification() {
-    const popups = notifications.bind("popups")
-    return Widget.Box({
-        class_name: "notification",
-        visible: popups.as(p => p.length > 0),
-        children: [
-            Widget.Icon({
-                icon: "preferences-system-notifications-symbolic",
-            }),
-            Widget.Label({
-                label: popups.as(p => p[0]?.summary || ""),
-            }),
-        ],
-    })
-}
-
 
 function Media() {
     const label = Utils.watch("", mpris, "player-changed", () => {
@@ -226,13 +207,13 @@ function BatteryLabel() {
                 value,
             }),
         ],
-        setup: self => self.hook(battery, self => {
+        setup: self => self.poll(10000, self => {
             if(Number(battery.percent) < 20 && !battery.charging) {
                 Utils.execAsync(`notify-send "Battery Low"`)
             } else if(Number(battery.percent) == 100) {
                 Utils.execAsync(`notify-send "Battery Full"`)
             }
-        }, "changed"),
+        }),
     })
 }
 
@@ -268,7 +249,6 @@ function Center() {
         spacing: 8,
         children: [
             Media(),
-            Notification(),
         ],
     })
 }
@@ -320,7 +300,7 @@ App.config({
     windows: [
         Bar(),
         applauncher,
-
+        NotificationPopups(),
         // you can call it, for each monitor
         // Bar(0),
         // Bar(1)
