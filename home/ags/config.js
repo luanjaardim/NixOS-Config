@@ -3,6 +3,7 @@ const notifications = await Service.import("notifications")
 const mpris = await Service.import("mpris")
 const audio = await Service.import("audio")
 const battery = await Service.import("battery")
+const network = await Service.import('network')
 const systemtray = await Service.import("systemtray")
 import { applauncher } from "./applauncher.js"
 import { NotificationPopups } from "./notifications.js"
@@ -25,6 +26,40 @@ const ram = Variable(0, {
         .find(line => line.includes('Mem:'))
         .split(/\s+/)
         .splice(1, 2))],
+})
+
+const WifiIndicator = () => {
+    const showName = Variable(false)
+    return Widget.Button({
+        onHoverLost: async () => showName.value = false,
+        onHover: async () => showName.value = true,
+        onClicked: () => Utils.execAsync('kitty nmtui'),
+        child: Widget.Box({
+            children: [
+                Widget.Icon({
+                    css: 'margin-right: 5px;',
+                    icon: network.wifi.bind('icon_name'),
+                }),
+                Widget.Label({
+                    label: network.wifi.bind('ssid')
+                        .as(ssid => ssid || 'Unknown'),
+                    visible: showName.bind(),
+                }),
+            ],
+        })
+    })
+}
+
+const WiredIndicator = () => Widget.Icon({
+    icon: network.wired.bind('icon_name'),
+})
+
+const NetworkIndicator = () => Widget.Stack({
+    children: {
+        wifi: WifiIndicator(),
+        wired: WiredIndicator(),
+    },
+    shown: network.bind('primary').as(p => p || 'wifi'),
 })
 
 // widgets can be only assigned as a child in one container
@@ -268,6 +303,7 @@ function Right() {
                     InfoProgress(Widget.Label({label: "CPU"}), cpu.bind()),
                     InfoProgress(Widget.Label({label: "RAM"}), ram.bind()),
                     BatteryLabel(),
+                    NetworkIndicator(),
                 ]
             }),
             Clock(),
