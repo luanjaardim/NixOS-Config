@@ -80,6 +80,9 @@ label {
 }
 .clock {
     border-bottom: 2px solid $c1;
+    button {
+        all: unset;
+    }
 }
 .utils {
     border-bottom: 2px solid $c3;
@@ -106,6 +109,30 @@ label {
     }
     .entry {
         border: 2px solid $c1;
+    }
+}
+
+.calendar {
+    font-weight: 700;
+    background-color: $bg_alt;
+    margin-top: 10px;
+    .content {
+        calendar.header, calendar.button {
+            color: $c1;
+        }
+        calendar.highlight {
+            color: $c8;
+        }
+        calendar:indeterminate {
+            color: $fg_alt;
+        }
+        calendar:selected {
+            color: $c2;
+            background-color: $bg_sel;
+        }
+        padding: 5px 10px 0px 10px;
+        border: 2px solid $c0;
+        border-radius: 10px;
     }
 }
 

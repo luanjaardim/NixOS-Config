@@ -100,9 +100,12 @@ function ClientTitle() {
 
 
 function Clock() {
-    return Widget.Label({
+    return Widget.Button({
         class_name: "clock",
-        label: date.bind(),
+        onClicked: () => Utils.execAsync('ags -t calendar'),
+        child: Widget.Label({
+            label: date.bind(),
+        })
     })
 }
 
@@ -141,7 +144,8 @@ export function custom_revealer(trigger, slider, custom_class = '', on_primary_c
     });
 
     const eventBox = Widget.EventBox({
-        class_name: "custom-revealer button" + custom_class,
+        css: 'margin: 2px',
+        class_name: custom_class,
         on_hover: async (self) =>
         {
             revealer.reveal_child = true
@@ -327,6 +331,32 @@ function Bar(monitor = 0) {
     })
 }
 
+const Calendar = (monitor = 0) => Widget.Window({
+    name: "calendar",
+    visible: false,
+    anchor: ["top", "right"],
+    monitor: 0,
+    child: Widget.Box({
+        class_name: "calendar",
+        hexpand: true,
+        children: [
+            Widget.Calendar({
+                class_name: "content",
+                showDayNames: true,
+                showDetails: true,
+                showHeading: true,
+                detail: (self, y, m, d) => {
+                    return `<span color="white"></span>`
+                },
+                onDaySelected: ({ date: [y, m, d] }) => {
+                    print(`${d}/${m}/${y}`)
+                },
+            })
+        ]
+    })
+})
+
+
 const scss = App.configDir + "/style.scss";
 const css = App.configDir + "/style.css";
 
@@ -339,6 +369,7 @@ App.config({
         applauncher,
         utilities_btns,
         NotificationPopups(),
+        Calendar(),
         // you can call it, for each monitor
         // Bar(0),
         // Bar(1)
