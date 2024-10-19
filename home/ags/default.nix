@@ -8,6 +8,7 @@
   xdg.configFile."ags/config.js".source = config.lib.file.mkOutOfStoreSymlink ~/.dots/home/ags/config.js;
   xdg.configFile."ags/style.scss".source = config.lib.file.mkOutOfStoreSymlink ~/.dots/home/ags/style.scss;
   xdg.configFile."ags/applauncher.js".source = config.lib.file.mkOutOfStoreSymlink ~/.dots/home/ags/applauncher.js;
+  xdg.configFile."ags/utilities_btns.js".source = config.lib.file.mkOutOfStoreSymlink ~/.dots/home/ags/utilities_btns.js;
   xdg.configFile."ags/notifications.js".source = config.lib.file.mkOutOfStoreSymlink ~/.dots/home/ags/notifications.js;
 
   # Package to compile scss into css
