@@ -183,6 +183,8 @@
       layerrule = ignorezero, eww
 
       windowrulev2 = suppressevent maximize, class:.* # You'll probably like this.
+      windowrule = opacity 0.8 0.7, ^("$terminal")$
+      windowrule = opacity 0.8 0.7, ^("$terminal")$
 
       xwayland {
         force_zero_scaling = true
