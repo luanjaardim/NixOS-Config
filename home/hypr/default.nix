@@ -27,7 +27,8 @@
     settings = {
         exec-once = [
             "hyprpaper &"
-            "eww daemon ; eww open bar ; sleep 1sec ; eww open workspace"
+            # "eww daemon ; eww open bar ; sleep 1sec ; eww open workspace"
+            "ags"
         ];
 
         general = {
@@ -35,7 +36,9 @@
             "$terminal" = "kitty";
             "$file-manager" = "yazi";
             "$sys_monitor" = "btop";
-            "$menu" = "rofi -show drun";
+            # "$menu" = "rofi -show drun";
+            "$menu" = "ags -t applauncher";
+            "$actions" = "ags -t utilities_btns";
             gaps_in = 3;
             gaps_out = 5;
             no_focus_fallback = true;
@@ -63,8 +66,8 @@
             rounding = 5;
             blur = {
                 enabled = true;
-                size = 7;
-                passes = 1;
+                size = 10;
+                passes = 2;
             };
             active_opacity = 0.92;
             inactive_opacity = 0.87;
@@ -93,6 +96,7 @@
             "$mod, Y, exec, kitty $file-manager"
             "$mod, B, exec, kitty $sys_monitor"
             "$mod, SPACE, exec, $menu"
+            "$mod SHIFT, SPACE, exec, $actions"
             "$mod, Q, killactive"
             "$mod, M, exit"
             "$mod, S, togglefloating"

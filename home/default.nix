@@ -1,7 +1,6 @@
 { config, pkgs, settings, ... }:
 
 let
-  lib = pkgs.lib;
   user = settings.user;
   aliases = {
     l = "ls -la";
@@ -29,29 +28,16 @@ in
 
   imports = [
     ./stylix
-    ./rofi
-    ./dunst
     ./neovim
+    ./firefox
     ./starship
     ./yazi
-    ./firefox
-    ./bspwm
-    ./sxhkd
-    ./hypr
-    ./ags
     ./../scripts
-  ];
-  # imports = [
-  #   ./rofi
-  #   ./dunst
-  #   ./neovim
-  #   ./starship
-  #   ./firefox
-  # ] ++
-  # (if settings.wm == "bspwm" then
-  #   [ ./bspwm ./sxhkd ]
-  # else
-  #   [ ./hypr ]);
+  ] ++
+  (if settings.wm == "bspwm" then
+    [ ./bspwm ./sxhkd ./rofi ./dunst ]
+  else
+    [ ./hypr ./ags ]);
 
   # Bluetooth buttons
   services.mpris-proxy.enable = true;
@@ -158,8 +144,9 @@ in
 
   programs = {
     eww = {
-      enable = true;
-      configDir = ./eww;
+      # Only using eww if in bspwm, if switching the configuration with 'mkOutOfStoreSymlink' use --impure flag
+      enable = settings.wm == "bspwm";
+      configDir = config.lib.file.mkOutOfStoreSymlink ~/.dots/home/eww;
     };
     # basic configuration of git
     git = {
