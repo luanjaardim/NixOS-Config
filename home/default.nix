@@ -12,16 +12,17 @@ let
     gitl = "git log --oneline --graph --all";
     gitc = "git commit -m";
   };
+  env_vars = {
+    EDITOR = "nvim";
+    # For hyprland running Electron apps
+    NIXOS_OZONE_WL = "1";
+  };
 in
 {
   home = {
     username = "${user}";
     homeDirectory = "/home/${user}";
-    sessionVariables = {
-      EDITOR = "nvim";
-      # For hyprland running Electron apps
-      NIXOS_OZONE_WL = "1";
-    };
+    sessionVariables = env_vars;
   };
 
   nixpkgs.config.allowUnfree = true;
@@ -30,6 +31,7 @@ in
     ./stylix
     ./neovim
     ./firefox
+    ./spicetify
     ./starship
     ./yazi
     ./../scripts
@@ -136,7 +138,6 @@ in
 
     # Other programs
     anydesk
-    spotify
     discord
     vlc
     obs-studio
@@ -159,6 +160,7 @@ in
     nushell = {
       enable = true;
       shellAliases = aliases;
+      environmentVariables = env_vars;
       configFile.text = ''
         $env.config = {
           # remove the welcome message
