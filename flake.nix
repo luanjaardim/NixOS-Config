@@ -44,7 +44,7 @@
     inherit (self) outputs;
     pkgs = nixpkgs.legacyPackages.${settings.system};
     lib = nixpkgs.lib;
-    settings = import ./utils/settings.nix { inherit pkgs lib; };
+    settings = import ./utils/settings.nix { pkgs = pkgs; };
   in
   {
     # NixOS configuration entrypoint

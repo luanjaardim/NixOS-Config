@@ -72,12 +72,7 @@
             active_opacity = 0.92;
             inactive_opacity = 0.87;
 
-            drop_shadow = true;
-
-            shadow_ignore_window = true;
-            shadow_offset = "0 2";
-            shadow_range = 20;
-            shadow_render_power = 3;
+            drop_shadow = false;
         };
 
         animations = {

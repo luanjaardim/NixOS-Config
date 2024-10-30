@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, config ? null, ... }:
 
 rec {
   # TODO: update info below.
@@ -19,9 +19,4 @@ rec {
   font = "FiraCode";
   theme = "catppuccin-mocha";
   wallpaper = ../wallpaper.png;
-  image = pkgs.runCommand "wallpaper.png" { } "cp ${wallpaper} $out";
-  # Running imagemagick command on the wallpaper
-  # image = pkgs.runCommand "dimmed-background.png" { } ''
-  #     ${pkgs.imagemagick}/bin/convert "${wallpaper}" -brightness-contrast -30,0 -fill "black" $out
-  # '';
 }
