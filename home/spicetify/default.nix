@@ -30,30 +30,29 @@ in
         pointer
       ];
 
-      theme = spicePkgs.themes.sleek;
-      colorScheme = "custom";
-      customColorScheme = with colors; {
-        "text"               = "${base05}";
-        "subtext"            = "${base04}";
-        "nav-active-text"    = "${bright-orange}";
-        "main"               = "${base00}";
-        "sidebar"            = "${base01}";
-        "player"             = "${base02}";
-        "card"               = "${base00}";
-        "shadow"             = "${base02}";
-        "main-secondary"     = "${base01}";
-        "button"             = "${brown}";
-        "button-secondary"   = "${bright-cyan}";
-        "button-active"      = "${orange}";
-        "button-disabled"    = "${base0D}";
-        "nav-active"         = "${bright-magenta}";
-        "play-button"        = "${bright-green}";
-        "tab-active"         = "${yellow}";
-        "notification"       = "${blue}";
-        "notification-error" = "${red}";
-        "playback-bar"       = "${bright-red}";
-        "misc"               = "${bright-magenta}";
-      };
+      # colorScheme = "custom";
+      # customColorScheme = with colors; {
+      #   "text"               = "${base05}";
+      #   "subtext"            = "${base04}";
+      #   "nav-active-text"    = "${bright-orange}";
+      #   "main"               = "${base00}";
+      #   "sidebar"            = "${base01}";
+      #   "player"             = "${base02}";
+      #   "card"               = "${base00}";
+      #   "shadow"             = "${base02}";
+      #   "main-secondary"     = "${base01}";
+      #   "button"             = "${brown}";
+      #   "button-secondary"   = "${bright-cyan}";
+      #   "button-active"      = "${orange}";
+      #   "button-disabled"    = "${base0D}";
+      #   "nav-active"         = "${bright-magenta}";
+      #   "play-button"        = "${bright-green}";
+      #   "tab-active"         = "${yellow}";
+      #   "notification"       = "${blue}";
+      #   "notification-error" = "${red}";
+      #   "playback-bar"       = "${bright-red}";
+      #   "misc"               = "${bright-magenta}";
+      # };
       
     };
 
