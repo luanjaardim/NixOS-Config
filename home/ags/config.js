@@ -110,9 +110,13 @@ function Clock() {
 }
 
 function Media() {
+    let player = Variable(0)
     const label = Utils.watch("", mpris, "player-changed", () => {
-        if (mpris.players[0]) {
-            const { track_artists, track_title } = mpris.players[0]
+        // Giving preference for spotify player to be shown
+        const spotify_player = mpris.players.findIndex((p) => p.name == "spotify")
+        player.value = spotify_player == -1 ? 0 : spotify_player
+        if (mpris.players[player.value]) {
+            const { track_artists, track_title } = mpris.players[player.value]
             const music = `${track_artists.join(", ")} - ${track_title}`
             const maxLen = 50;
             return music.length > maxLen ? `${music.slice(0, maxLen-3)}...` : music
@@ -123,13 +127,13 @@ function Media() {
 
     return Widget.Button({
         class_name: label.as( s => s.length == 0 ? "" : "media"),
-        onPrimaryClick: () => mpris.getPlayer("")?.playPause(),
+        onPrimaryClick: () => mpris.players[player.value].playPause(),
         // Go to next song
-        onSecondaryClick: () => mpris.getPlayer("")?.next(),
-        onScrollUp: () => mpris.getPlayer("")?.next(),
+        onSecondaryClick: () => mpris.players[player.value].next(),
+        onScrollUp: () => mpris.players[player.value].next(),
         // Go to previous song
-        onMiddleClick: () => mpris.getPlayer("")?.previous(),
-        onScrollDown: () => mpris.getPlayer("")?.previous(),
+        onMiddleClick: () => mpris.players[player.value].previous(),
+        onScrollDown: () => mpris.players[player.value].previous(),
         child: Widget.Label({ label }),
     })
 }
