@@ -22,7 +22,7 @@ in
     xc:'${colors.base0D}' \
     xc:'${colors.base0E}' \
     xc:'${colors.base0F}' \
-    +append miff:- | ${pkgs.imagemagick}/bin/magick ${settings.wallpaper} -remap miff:- $out
+    +append miff:- | ${pkgs.imagemagick}/bin/magick ${settings.wallpaper} -dither None -remap miff:- $out
   '';
 }
 
