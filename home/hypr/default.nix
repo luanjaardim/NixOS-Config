@@ -109,18 +109,6 @@
             "$mod SHIFT, k, swapwindow, u"
             "$mod SHIFT, j, swapwindow, d"
 
-            # Increase window size
-            "$mod ALT, h, resizeactive, -10 0"
-            "$mod ALT, l, resizeactive, 10 0"
-            "$mod ALT, k, resizeactive, 0 -10 "
-            "$mod ALT, j, resizeactive, 0 10"
-
-            # Decrease window size
-            "$mod ALT SHIFT, h, resizeactive, 10 0"
-            "$mod ALT SHIFT, l, resizeactive, -10 0"
-            "$mod ALT SHIFT, k, resizeactive, 0 10 "
-            "$mod ALT SHIFT, j, resizeactive, 0 -10"
-
             ] ++
             # Generating move to workspace and send window to workspace
             (builtins.concatLists (
@@ -145,6 +133,15 @@
             $mod, Print, exec, grim -g "$(slurp)" "$HOME/pictures/screenshots/$(date '+%y%m%d_%H-%M-%S').png"
             ''
             '', Print, exec, grim -g "$(slurp)" - | wl-copy''
+        ];
+
+        # Bindings that allows holding for multiple executions
+        binde = [
+            # Resize window
+            "$mod ALT, h, resizeactive, -10 0"
+            "$mod ALT, l, resizeactive, 10 0"
+            "$mod ALT, k, resizeactive, 0 -10 "
+            "$mod ALT, j, resizeactive, 0 10"
         ];
 
         # Bindings for mouse
