@@ -17,7 +17,8 @@ in
     systemd-boot.enable = true;
     efi.canTouchEfiVariables = true;
   });
-  virtualisation.virtualbox = if settings.is_vm then { guest.enable = true; } else { host.enable = true; };
+  virtualisation.libvirtd.enable = true;
+  programs.virt-manager.enable = true;
 
   networking.hostName = "${hostname}"; # Define your hostname.
   # Pick only one of the below networking options.
@@ -81,6 +82,13 @@ in
       wantedBy = [ "default.target" ];
       serviceConfig.ExecStart = "${pkgs.bluez}/bin/mpris-proxy";
   };
+  # Adding a custom systemd service to run the net-start at login
+  systemd.services.virt_manager_network = {
+      description = "Start Virtual Manager default network";
+      wantedBy = [ "multi-user.target" ]; # Starts after login
+      path = [ "/run/current-system/sw" ]; # Adding 'virsh' command to the path when running the script
+      script = "virsh net-start default";
+  };
 
   # Enable touchpad support (enabled default in most desktopManager).
   services.libinput.enable = true;
@@ -88,11 +96,10 @@ in
   programs.fish.enable = true;
 
   users = {
-    extraGroups.vboxusers.members = [ user ];
     # Define a user account. Don't forget to set a password with ‘passwd’.
     users."${user}" = {
       isNormalUser = true;
-      extraGroups = [ "wheel" "networkmanager" ]; # Adding user to groups
+      extraGroups = [ "wheel" "networkmanager" "libvirtd" ]; # Adding user to groups
       initialPassword = "nixos"; # TODO: change this.
       shell = settings.shell;
     };
